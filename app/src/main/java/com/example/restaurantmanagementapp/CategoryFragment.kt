@@ -6,14 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 
-
-class CartFragment : Fragment() {
+class CategoryFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_cart, container, false)
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_menu_category, container, false)
     }
 }

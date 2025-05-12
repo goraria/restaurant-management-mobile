@@ -23,7 +23,8 @@
             android:layout_height="170dp"
             android:scaleType="centerCrop"
             android:background="@null"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher"
+            android:contentDescription="Món ăn"/>
 
         <TextView
             android:id="@+id/foodName"

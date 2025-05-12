@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Thực đơn"
-            android:textSize="30dp"
+            android:textSize="30sp"
             android:textStyle="bold"
             android:textAlignment="center"
             />
@@ -24,10 +24,12 @@
             android:id="@+id/recyclerCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:padding="8dp"
             android:overScrollMode="never"
             android:clipToPadding="false"
-            android:layout_marginBottom="4dp" />
+            android:layout_marginBottom="4dp"
+            android:contentDescription="Danh mục chọn loại món ăn"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -47,7 +49,8 @@
             android:layout_weight="1"
             android:padding="8dp"
             android:clipToPadding="false"
-            android:overScrollMode="never" />
+            android:overScrollMode="never"
+            android:contentDescription="Danh sách món ăn" />
     </LinearLayout>
 
 

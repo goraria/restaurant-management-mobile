@@ -12,6 +12,7 @@
         android:orientation="vertical"
         android:padding="8dp"
         android:gravity="center"
+
         tools:ignore="MissingConstraints">
 
         <ImageView

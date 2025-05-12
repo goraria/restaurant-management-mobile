@@ -15,18 +15,73 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Thông tin tài khoản"
-            android:textSize="30dp"
+            android:textSize="30sp"
             android:textAlignment="center"
             android:textStyle="bold"
+            android:layout_marginTop="8dp"
 
             />
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:src="@mipmap/ic_launcher"
-
+            android:layout_marginTop="64dp"
 
             />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tên tài khoản:"
+            android:textSize="20sp"
+            android:layout_marginTop="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nguyễn Mai Phương"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="64dp"
+            android:layout_marginRight="64dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chức vụ:"
+            android:textSize="20sp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nhân viên"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="64dp"
+            android:layout_marginRight="64dp"
+            />
+
+        <Button
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:backgroundTint="@color/gray"
+            android:text="Đăng xuất"
+            android:textSize="20sp"
+            android:layout_gravity="center"
+
+            />
+
     </LinearLayout>
 </FrameLayout>
