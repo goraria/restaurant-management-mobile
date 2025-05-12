@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    tools:context=".CartFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        >
+        <TextView
+            android:id="@+id/tvcart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Món đã chọn"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:textSize="30dp"
+            />
+
+         <include layout="@layout/fragment_ordered"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            >
+            <TextView
+                android:id="@+id/tvsum"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Tổng:"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="8dp"
+                />
+
+            <TextView
+                android:id="@+id/tvcost"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="666.666 đ"
+                android:textSize="40dp"
+                android:textStyle="bold"
+                android:textColor="@color/red"
+                android:layout_marginRight="8dp"
+                />
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            >
+
+            <Button
+                android:id="@+id/btnAdd"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Thêm món"
+                android:textSize="20dp"
+                android:backgroundTint="@color/blue"
+                android:layout_marginRight="6dp"
+                />
+
+            <Button
+                android:id="@+id/btOrder"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Thanh toán"
+                android:textSize="20dp"
+                android:backgroundTint="@color/purple"
+                android:layout_marginLeft="6dp"
+                />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</FrameLayout>

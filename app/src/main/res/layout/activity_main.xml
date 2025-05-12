@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:id="@+id/bottomNavigate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/da"
+           >
+
+            <Button
+                android:id="@+id/btnhome"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/baseline_home_24"
+                android:gravity="center"
+                android:text="Trang chủ"
+                android:textColor="@color/material_dynamic_neutral50"
+                android:backgroundTint="@color/da"
+                android:padding="6dp"/>
+
+            <Button
+                android:id="@+id/btnmenu"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/baseline_restaurant_menu_24"
+                android:gravity="center"
+                android:text="Thực đơn"
+                android:textColor="@color/material_dynamic_neutral50"
+                android:backgroundTint="@color/da"
+                android:padding="6dp"/>
+
+            <Button
+                android:id="@+id/btncart"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/baseline_add_shopping_cart_24"
+                android:gravity="center"
+                android:text="Giỏ hàng"
+                android:textColor="@color/material_dynamic_neutral50"
+                android:backgroundTint="@color/da"
+                android:padding="6dp"/>
+
+            <Button
+                android:id="@+id/btnaccount"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/baseline_account_circle_24"
+                android:gravity="center"
+                android:text="Tài khoản"
+                android:textColor="@color/material_dynamic_neutral50"
+                android:backgroundTint="@color/da"
+                android:padding="6dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
