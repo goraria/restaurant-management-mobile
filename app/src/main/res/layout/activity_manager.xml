@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/manager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:id="@+id/bottomNavigate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/purple"
+           >
+
+            <Button
+                android:id="@+id/btndashboard"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/outline_dashboard_24"
+                android:gravity="center"
+                android:text="Trang chủ"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/purple"
+                android:padding="6dp"/>
+
+            <Button
+                android:id="@+id/btnmanagement"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/outline_category_search_24"
+                android:gravity="center"
+                android:text="Quản lý"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/purple"
+                android:padding="6dp"/>
+
+            <Button
+                android:id="@+id/btnmessage"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/outline_chat_24"
+                android:gravity="center"
+                android:text="Tin nhắn"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/purple"
+                android:padding="6dp"/>
+
+            <Button
+                android:id="@+id/btnnotification"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/outline_notifications_24"
+                android:gravity="center"
+                android:text="Thông báo"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/purple"
+                android:padding="6dp"/>
+
+            <Button
+                android:id="@+id/btnaccount"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/outline_account_circle_24"
+                android:gravity="center"
+                android:text="Tài khoản"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/purple"
+                android:padding="6dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
