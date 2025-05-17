@@ -20,22 +20,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.restaurantmanagementapp.config.Database
 import com.example.restaurantmanagementapp.model.User
+import com.example.restaurantmanagementapp.ui.theme.RestaurantManagementTheme
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            RestaurantManagementTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    UserList()
-                }
-            }
-        }
+        setContentView(R.layout.activity_main)
+//        setContent {
+//            RestaurantManagementTheme {
+//                Surface(
+//                    modifier = Modifier.fillMaxSize(),
+//                    color = MaterialTheme.colorScheme.background
+//                ) {
+//                    UserList()
+//                }
+//            }
+//        }
     }
 }
 
@@ -46,9 +51,7 @@ fun UserList() {
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
             try {
-                val result = SupabaseClient.client.postgrest["users"].select {
-                    columns(Columns.raw("*"))
-                }
+                val result = Database.client.postgrest.from("users").select()
                 users = result.decodeList()
             } catch (e: Exception) {
                 e.printStackTrace()

@@ -3,11 +3,19 @@ plugins {
     alias(libs.plugins.kotlin.android)
     // kotlin("plugin.serialization")
     id("org.jetbrains.kotlin.plugin.serialization") version "2.1.20"
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
     namespace = "com.example.restaurantmanagementapp"
     compileSdk = 35
+
+    packaging {
+        resources {
+            excludes += "META-INF/INDEX.LIST"
+        }
+    }
+
 
     defaultConfig {
         applicationId = "com.example.restaurantmanagementapp"
@@ -35,6 +43,13 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "2.0.0"
+    }
+
 }
 
 dependencies {
@@ -55,9 +70,7 @@ dependencies {
     // implementation(libs.gotrue.kt)
 
     // implementation(platform("io.github.jan-tennert.supabase:bom:$supabase_version"))
-    implementation(libs.postgrest.kt)
     // implementation("io.ktor:ktor-client-android:$ktor_version")
-    implementation(libs.ktor.client.android)
 
     // Kotlinx Serialization
     implementation(libs.kotlinx.serialization.json)
@@ -65,7 +78,7 @@ dependencies {
     // Ktor
     implementation(libs.ktor.ktor.client.android)
     implementation(libs.ktor.client.logging)
-    implementation(libs.logback.classic)
+    implementation(libs.logback.android)
     
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
@@ -88,5 +101,10 @@ dependencies {
     // implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
     // Kotlinx DateTime
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
+    implementation(libs.kotlinx.datetime)
+
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.material3)
+
 }
