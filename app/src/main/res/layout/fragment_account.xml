@@ -3,97 +3,125 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     tools:context=".AccountFragment">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+
         <TextView
             android:id="@+id/tvaccinfo"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Thông tin tài khoản"
             android:textSize="30sp"
-            android:textAlignment="center"
             android:textStyle="bold"
-            android:layout_marginTop="8dp"
-
-            />
+            android:textAlignment="center"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp" />
 
         <ImageView
-            android:layout_width="match_parent"
+            android:id="@+id/img_avatar"
+            android:layout_width="0dp"
             android:layout_height="100dp"
             android:src="@mipmap/ic_launcher"
+            app:layout_constraintTop_toBottomOf="@id/tvaccinfo"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:layout_marginTop="64dp"
 
             />
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tv_name_label"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Tên tài khoản:"
             android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/img_avatar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:layout_marginTop="32dp"
             android:layout_marginLeft="32dp"
             android:layout_marginRight="32dp"
             />
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tv_name"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Nguyễn Mai Phương Nguyễn Mai Phương Nguyễn Mai Phương"
             android:textSize="20sp"
             android:textStyle="italic"
-            android:singleLine="false"
+            app:layout_constraintTop_toBottomOf="@id/tv_name_label"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="64dp"
             android:layout_marginRight="64dp"
             />
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tv_role_label"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Chức vụ:"
             android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/tv_name"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="32dp"
             android:layout_marginRight="32dp"
             />
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tv_role"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Nhân viên"
             android:textSize="20sp"
             android:textStyle="italic"
+            app:layout_constraintTop_toBottomOf="@id/tv_role_label"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="64dp"
             android:layout_marginRight="64dp"
             />
 
         <Button
+            android:id="@+id/btnedit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
-            android:backgroundTint="@color/red"
             android:text="Chỉnh sửa thông tin"
             android:textSize="20sp"
-            android:layout_gravity="center"
+            android:backgroundTint="@color/red"
+            app:layout_constraintTop_toBottomOf="@id/tv_role"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/btnlogout"
 
             />
 
         <Button
+            android:id="@+id/btnlogout"
             android:layout_width="230dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/gray"
             android:text="Đăng xuất"
             android:textSize="20sp"
-            android:layout_gravity="center"
+            android:backgroundTint="@color/gray"
+            app:layout_constraintTop_toBottomOf="@id/btnedit"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
 
             />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
