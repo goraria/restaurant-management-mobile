@@ -28,6 +28,7 @@ class CartFragment : Fragment() {
         btnPay = view.findViewById(R.id.btnPay)
         btnAdd = view.findViewById(R.id.btnAdd)
 
+
         btnPay.setOnClickListener {
             Toast.makeText(requireContext(), "Đã nhấn Thanh toán", Toast.LENGTH_SHORT).show()
             val intent = Intent(requireContext(), Bill::class.java)
