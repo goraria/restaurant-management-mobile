@@ -2,6 +2,7 @@ package com.example.restaurantmanagementapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -38,6 +39,7 @@ class OrderedFragment : Fragment() {
         tvQua.text = quality.toString()
 
         btnAdd.setOnClickListener {
+            Log.d("OrderedFragment", "Đã nhấn nút tăng")
             quality++
             tvQua.text = quality.toString()
         }
@@ -49,6 +51,12 @@ class OrderedFragment : Fragment() {
             } else {
                 Toast.makeText(requireContext(), "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        btnDelete.setOnClickListener {
+            quality = 1
+            tvQua.text = quality.toString()
+            Toast.makeText(requireContext(), "Đã xóa món khỏi đơn", Toast.LENGTH_SHORT).show()
         }
     }
 
