@@ -1,4 +1,4 @@
-package com.example.restaurantmanagementapp.com.example.restaurantmanagementapp.ui
+package com.example.restaurantmanagementapp
 
 import android.os.Bundle
 import android.widget.Button
@@ -31,7 +31,7 @@ class Bill : AppCompatActivity() {
                 soLuong = 6,
                 desc= "Cánh gà chiên giòn, ngon tuyệt vời.",
                 price = 666_666,
-                imgid = 1
+                imgid = R.mipmap.canhga
             )
         )
         adapter.addMonAn(
@@ -40,7 +40,7 @@ class Bill : AppCompatActivity() {
                 soLuong = 3,
                 desc= "Gà rán vàng ruộm, béo ngậy.",
                 price = 299_000,
-                imgid = 1
+                imgid = R.mipmap.canhga
             )
         )
 

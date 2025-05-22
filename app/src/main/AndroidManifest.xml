@@ -12,25 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RestaurantManagementApp"
         tools:targetApi="31">
+
         <activity
-            android:name=".layout.SettingActivity"
-            android:exported="true"
-            android:label="@string/title_activity_setting"
-            android:theme="@style/Theme.RestaurantManagementApp.NoActionBar" >
-        </activity>
-        <activity
-            android:name=".ui.authentication.LoginActivity"
+            android:name=".Bill"
             android:exported="true"></activity>
+
         <activity
-            android:name=".ui.authentication.RegisterActivity"
+            android:name=".FoodDetail"
             android:exported="true"></activity>
+
         <activity
-            android:name=".layout.ManagerActivity"
+            android:name=".MainActivity"
             android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
