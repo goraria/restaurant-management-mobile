@@ -12,6 +12,7 @@ import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 
 class FoodDetail : AppCompatActivity() {
 
@@ -26,7 +27,6 @@ class FoodDetail : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.food_detail)
-
         btnAdd = findViewById(R.id.btnAdd)
         btnMinus= findViewById(R.id.btnMinus)
         btnBack= findViewById(R.id.btnBack)
@@ -47,6 +47,31 @@ class FoodDetail : AppCompatActivity() {
 
         btnBack.setOnClickListener {
             finish()
+        }
+
+        btnOrder.setOnClickListener {
+            // Lấy dữ liệu món ăn từ Intent
+            val foodName = intent.getStringExtra("foodName") ?: return@setOnClickListener
+            val foodDesc = intent.getStringExtra("foodDesc") ?: ""
+            val foodPrice = intent.getIntExtra("foodPrice", 0)
+            val foodImage = intent.getIntExtra("foodImage", R.mipmap.ic_launcher)
+
+            // Tạo đối tượng MonAn
+            val monAn = MonAn(
+                name = foodName,
+                soLuong = quantity,
+                desc = foodDesc,
+                price = foodPrice,
+                imgid = foodImage
+            )
+
+            // Lưu vào ViewModel
+            val viewModel = ViewModelProvider(this)[SharedViewModel::class.java]
+            viewModel.themMonAn(monAn)
+
+            // Thông báo & quay lại
+            Toast.makeText(this, "Đã thêm món: $foodName ($quantity)", Toast.LENGTH_SHORT).show()
+            finish() // Quay về màn trước
         }
 
         btnAdd.setOnClickListener {

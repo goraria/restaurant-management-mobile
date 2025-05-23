@@ -2,15 +2,18 @@ package com.example.restaurantmanagementapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MenuFragment : Fragment() {
+    private lateinit var viewModel: SharedViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,6 +25,13 @@ class MenuFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+
+        viewModel.danhSachMonAn.observe(viewLifecycleOwner) { danhSach ->
+            // Ví dụ: in ra log hoặc hiển thị danh sách món đã đặt
+            Log.d("MenuFragment", "Đã đặt: $danhSach")
+        }
 
         val recyclerCategory = view.findViewById<RecyclerView>(R.id.recyclerCategory)
         val recyclerFood = view.findViewById<RecyclerView>(R.id.recyclerFood)
@@ -46,7 +56,7 @@ class MenuFragment : Fragment() {
     private fun getFoods(): List<Food> {
         return listOf(
             Food("Gà rán", "Đùi gà và cánh gà", 99000, R.drawable.ic_launcher_background),
-
+            Food("Gà rán", "Đùi gà và cánh gà", 99000, R.drawable.ic_launcher_background),
         )
     }
 
