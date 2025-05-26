@@ -49,14 +49,26 @@
                 android:backgroundTint="@color/purple"
                 android:padding="6dp"/>
 
+<!--            <Button-->
+<!--                android:id="@+id/btnmessage"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:drawableTop="@drawable/outline_chat_24"-->
+<!--                android:gravity="center"-->
+<!--                android:text="Tin nhắn"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:backgroundTint="@color/purple"-->
+<!--                android:padding="6dp"/>-->
+
             <Button
-                android:id="@+id/btnmessage"
+                android:id="@+id/btnstorge"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/outline_chat_24"
+                android:drawableTop="@drawable/outline_dashboard_customize_24"
                 android:gravity="center"
-                android:text="Tin nhắn"
+                android:text="Tồn kho"
                 android:textColor="@color/white"
                 android:backgroundTint="@color/purple"
                 android:padding="6dp"/>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+<!--        <item-->
+<!--            android:id="@+id/nav_menu_1"-->
+<!--            android:icon="@drawable/ic_menu_1"-->
+<!--            android:title="Thực đơn" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_menu_2"-->
+<!--            android:icon="@drawable/ic_menu_2"-->
+<!--            android:title="Danh mục" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_menu_3"-->
+<!--            android:icon="@drawable/ic_menu_3"-->
+<!--            android:title="Công thức" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_menu_4"-->
+<!--            android:icon="@drawable/ic_menu_3"-->
+<!--            android:title="Bàn ăn" />-->
+
+        <item
+            android:id="@+id/nav_menu_1"
+            android:title="Thực đơn" />
+        <item
+            android:id="@+id/nav_menu_2"
+            android:title="Danh mục" />
+        <item
+            android:id="@+id/nav_menu_3"
+            android:title="Công thức" />
+        <item
+            android:id="@+id/nav_menu_4"
+            android:title="Bàn ăn" />
+    </group>
+</menu> 
