@@ -23,7 +23,7 @@
 
     <!-- RecyclerView: Danh sách món ăn -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCartItems"
+        android:id="@+id/rvCartItem"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:clipToPadding="false"

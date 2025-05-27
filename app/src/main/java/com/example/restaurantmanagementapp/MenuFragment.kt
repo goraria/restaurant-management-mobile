@@ -45,14 +45,14 @@ class MenuFragment : Fragment() {
 
     private fun getFoods(): List<Food> {
         return listOf(
-            Food("Gà rán", "Đùi gà và cánh gà", 99000, R.drawable.ic_launcher_background),
+            Food("Gà rán", "Đùi gà và cánh gà", 99000, R.mipmap.canhga),
 
         )
     }
 
     private fun getCategories(): List<Category> {
         return listOf(
-            Category("Gà", R.drawable.ic_launcher_foreground),
+            Category("Gà", R.mipmap.canhga),
 
         )
     }
