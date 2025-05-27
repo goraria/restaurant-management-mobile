@@ -19,7 +19,7 @@
             android:id="@+id/categoryIcon"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/canhga" />
 
         <TextView
             android:id="@+id/categoryName"
