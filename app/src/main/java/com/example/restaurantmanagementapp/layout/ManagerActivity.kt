@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.restaurantmanagementapp.AccountFragment
 import com.example.restaurantmanagementapp.R
+import com.example.restaurantmanagementapp.StorageFragment
 import com.example.restaurantmanagementapp.ui.dashboard.DashboardFragment
 import com.example.restaurantmanagementapp.ui.management.ManagementFragment
 import com.example.restaurantmanagementapp.ui.message.MessageFragment
@@ -17,7 +18,8 @@ import com.example.restaurantmanagementapp.ui.notification.NotificationFragment
 class ManagerActivity : AppCompatActivity() {
     private lateinit var btndashboard: Button
     private lateinit var btnmanagement: Button
-    private lateinit var btnmessage: Button
+//    private lateinit var btnmessage: Button
+    private lateinit var btnstorge: Button
     private lateinit var btnnotification: Button
     private lateinit var btnaccount: Button
 
@@ -33,7 +35,8 @@ class ManagerActivity : AppCompatActivity() {
 
         btndashboard = findViewById(R.id.btndashboard)
         btnmanagement = findViewById(R.id.btnmanagement)
-        btnmessage = findViewById(R.id.btnmessage)
+//        btnmessage = findViewById(R.id.btnmessage)
+        btnstorge = findViewById(R.id.btnstorge)
         btnnotification = findViewById(R.id.btnnotification)
         btnaccount = findViewById(R.id.btnaccount)
 
@@ -41,7 +44,8 @@ class ManagerActivity : AppCompatActivity() {
 
         btndashboard.setOnClickListener { loadFragment(DashboardFragment()) }
         btnmanagement.setOnClickListener { loadFragment(ManagementFragment()) }
-        btnmessage.setOnClickListener { loadFragment(MessageFragment()) }
+//        btnmessage.setOnClickListener { loadFragment(MessageFragment()) }
+        btnstorge.setOnClickListener { loadFragment(StorageFragment()) }
         btnnotification.setOnClickListener { loadFragment(NotificationFragment()) }
         btnaccount.setOnClickListener { loadFragment(AccountFragment()) }
     }
