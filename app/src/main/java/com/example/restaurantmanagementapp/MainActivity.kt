@@ -78,8 +78,8 @@ fun UserList() {
                 Text("Không có dữ liệu người dùng", modifier = Modifier.padding(8.dp))
             }
         }
-        items(users, key = { it.user_id }) { user ->
-            Text("${user.first_name} ${user.last_name}", Modifier.padding(8.dp))
-        }
+//        items(users, key = { it.user_id }) { user ->
+//            Text("${user.first_name} ${user.last_name}", Modifier.padding(8.dp))
+//        }
     }
 }
