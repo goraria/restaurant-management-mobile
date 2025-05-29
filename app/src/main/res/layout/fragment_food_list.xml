@@ -9,6 +9,7 @@
     android:layout_marginLeft="8dp"
     card_view:cardCornerRadius="12dp"
     card_view:cardElevation="6dp"
+
     >
 
     <LinearLayout
@@ -23,7 +24,7 @@
             android:layout_height="170dp"
             android:scaleType="centerCrop"
             android:background="@null"
-            android:src="@mipmap/ic_launcher"
+            android:src="@mipmap/canhga"
             android:contentDescription="Món ăn"/>
 
         <TextView

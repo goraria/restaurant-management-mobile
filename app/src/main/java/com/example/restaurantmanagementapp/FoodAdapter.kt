@@ -15,7 +15,8 @@ data class Food(
     val category: String
 )
 
-class FoodAdapter(private val foodList: List<Food>) :
+class FoodAdapter(private val foodList: List<Food>,
+                  private val onFoodClick: (Food) -> Unit) :
     RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
 
     class FoodViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -37,6 +38,10 @@ class FoodAdapter(private val foodList: List<Food>) :
         holder.foodDesc.text = food.description
         holder.foodPrice.text = "${food.price} đ"
         holder.foodImage.setImageResource(food.imageResId)
+
+        holder.foodImage.setOnClickListener {
+            onFoodClick(food)
+        }
     }
 
     override fun getItemCount(): Int = foodList.size
