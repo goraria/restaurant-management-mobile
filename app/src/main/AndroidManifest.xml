@@ -25,9 +25,10 @@
             android:name=".ui.authentication.RegisterActivity"
             android:exported="true"></activity>
         <activity
-            android:name=".layout.ManagerActivity"
-            android:exported="true">
 
+            android:name=".MainActivity"
+            android:exported="true">
+<!--            android:name=".layout.ManagerActivity"-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

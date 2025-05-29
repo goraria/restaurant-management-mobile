@@ -1,6 +1,7 @@
 package com.example.restaurantmanagementapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,17 +31,17 @@ import kotlinx.coroutines.withContext
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-//        setContent {
-//            RestaurantManagementTheme {
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colorScheme.background
-//                ) {
-//                    UserList()
-//                }
-//            }
-//        }
+//        setContentView(R.layout.activity_main)
+        setContent {
+            RestaurantManagementTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    UserList()
+                }
+            }
+        }
     }
 }
 
@@ -49,13 +50,16 @@ fun UserList() {
     var users by remember { mutableStateOf<List<User>>(emptyList()) }
     
     LaunchedEffect(Unit) {
-        withContext(Dispatchers.IO) {
-            try {
-                val result = Database.client.postgrest.from("users").select()
-                users = result.decodeList()
-            } catch (e: Exception) {
-                e.printStackTrace()
+        try {
+            Log.d("UserList", "Starting API call...")
+            val result = Database.client.postgrest["users"].select()
+            users = result.decodeList<User>()
+            Log.d("UserList", "Fetched ${users.size} users")
+            users.forEach { user ->
+                Log.d("UserList", "User: ${user.first_name} ${user.last_name}")
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -68,6 +72,14 @@ fun UserList() {
                 text = "${user.first_name} ${user.last_name}",
                 modifier = Modifier.padding(8.dp)
             )
+        }
+        if (users.isEmpty()) {
+            item {
+                Text("Không có dữ liệu người dùng", modifier = Modifier.padding(8.dp))
+            }
+        }
+        items(users, key = { it.user_id }) { user ->
+            Text("${user.first_name} ${user.last_name}", Modifier.padding(8.dp))
         }
     }
 }
