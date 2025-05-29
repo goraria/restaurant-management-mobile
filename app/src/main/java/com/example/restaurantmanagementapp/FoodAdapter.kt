@@ -12,7 +12,7 @@ data class Food(
     val description: String,
     val price: Int,
     val imageResId: Int,
-
+    val category: String
 )
 
 class FoodAdapter(private val foodList: List<Food>,
