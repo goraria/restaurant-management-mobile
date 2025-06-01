@@ -4,24 +4,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     android:background="@color/white"
     tools:context=".CartFragment">
 
-    <!-- Tiêu đề -->
     <TextView
         android:id="@+id/tvcart"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Món đã chọn"
         android:textAlignment="center"
         android:textStyle="bold"
         android:textSize="30dp"
+        android:textColor="@color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/Aero"/>
 
-    <!-- RecyclerView: Danh sách món ăn -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCartItem"
         android:layout_width="0dp"
@@ -33,19 +32,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp" />
 
-    <!-- FrameLayout: Chứa fragment nhỏ nếu cần -->
-<!--    <FrameLayout-->
-<!--        android:id="@+id/ordered_fragment_container"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="80dp"-->
-<!--        android:background="@color/white"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/rvCartItems"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/total_section"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        android:layout_marginBottom="8dp" />-->
+    <FrameLayout
+        android:id="@+id/ordered_fragment_container"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/rvCartItem"
+        app:layout_constraintBottom_toTopOf="@id/total_section"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="8dp" />
 
-    <!-- Tổng tiền và nút -->
     <LinearLayout
         android:id="@+id/total_section"
         android:layout_width="0dp"
@@ -53,9 +50,10 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp">
 
-        <!-- Tổng tiền -->
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -78,15 +76,18 @@
                 android:text="666.666 đ"
                 android:textSize="40dp"
                 android:textStyle="bold"
-                android:textColor="@color/red" />
+                 />
         </LinearLayout>
 
-        <!-- Nút Thêm món & Thanh toán -->
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp">
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            >
 
             <Button
                 android:id="@+id/btnAdd"
@@ -105,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:text="Thanh toán"
                 android:textSize="20dp"
-                android:backgroundTint="@color/purple"
+                android:backgroundTint="@color/Aero"
                 android:layout_marginLeft="6dp" />
         </LinearLayout>
     </LinearLayout>
