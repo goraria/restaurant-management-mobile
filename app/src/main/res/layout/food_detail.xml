@@ -13,21 +13,30 @@
         android:textSize="30sp"
         android:textStyle="bold"
         android:textAlignment="center"
+        android:textColor="@color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:paddingTop="16dp"/>
+        android:background="@color/Aero"
+        />
 
     <ImageView
         android:id="@+id/ivFood"
         android:layout_width="0dp"
-        android:layout_height="200dp"
-        android:src="@mipmap/ic_launcher"
-        android:scaleType="fitCenter"
+        android:layout_height="0dp"
+        android:src="@mipmap/canhga"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:clipToOutline="true"
+        android:background="@drawable/rounded_corners"
         app:layout_constraintTop_toBottomOf="@id/tvfooddetail"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp"/>
+        app:layout_constraintDimensionRatio="16:9"
+        android:layout_marginTop="32dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"/>
+
 
     <TextView
         android:id="@+id/tvDescription"
@@ -62,7 +71,6 @@
         android:layout_height="wrap_content"
         android:text="666.666"
         android:textSize="30sp"
-        android:textColor="@color/red"
         android:textAlignment="center"
         android:layout_marginLeft="32dp"
         android:layout_marginTop="32dp"
@@ -89,7 +97,7 @@
             android:layout_height="60dp"
             android:text="-"
             android:textSize="25sp"
-            android:backgroundTint="@color/graygreen"/>
+            android:backgroundTint="@color/BeauBlue"/>
 
         <TextView
             android:id="@+id/tvQuantity"
@@ -106,7 +114,7 @@
             android:layout_height="60dp"
             android:text="+"
             android:textSize="25sp"
-            android:backgroundTint="@color/graygreen"/>
+            android:backgroundTint="@color/BeauBlue"/>
     </LinearLayout>
 
     <LinearLayout
@@ -126,7 +134,7 @@
             android:layout_height="wrap_content"
             android:text="Quay lại"
             android:textSize="20sp"
-            android:backgroundTint="@color/blue"
+            android:backgroundTint="@color/BlizzardBlue"
             android:layout_marginEnd="6dp"/>
 
         <Button
@@ -136,7 +144,7 @@
             android:layout_height="wrap_content"
             android:text="Thêm"
             android:textSize="20sp"
-            android:backgroundTint="@color/purple"
+            android:backgroundTint="@color/Aero"
             android:layout_marginStart="6dp"/>
     </LinearLayout>
 
