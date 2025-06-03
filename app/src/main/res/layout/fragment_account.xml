@@ -13,17 +13,19 @@
 
         <TextView
             android:id="@+id/tvaccinfo"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Thông tin tài khoản"
             android:textSize="30sp"
             android:textStyle="bold"
+            android:textColor="@color/white"
             android:textAlignment="center"
             android:gravity="center"
+            android:background="@color/Aero"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="8dp" />
+            />
 
         <ImageView
             android:id="@+id/img_avatar"
@@ -54,7 +56,7 @@
             android:id="@+id/tv_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Nguyễn Mai Phương Nguyễn Mai Phương Nguyễn Mai Phương"
+            android:text="Nguyễn Mai Phương "
             android:textSize="20sp"
             android:textStyle="italic"
             app:layout_constraintTop_toBottomOf="@id/tv_name_label"
@@ -100,8 +102,7 @@
             android:layout_height="wrap_content"
             android:text="Chỉnh sửa thông tin"
             android:textSize="20sp"
-            android:backgroundTint="@color/red"
-            app:layout_constraintTop_toBottomOf="@id/tv_role"
+            android:backgroundTint="@color/Aero"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/btnlogout"
@@ -115,11 +116,10 @@
             android:text="Đăng xuất"
             android:textSize="20sp"
             android:backgroundTint="@color/gray"
-            app:layout_constraintTop_toBottomOf="@id/btnedit"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-
+            android:layout_marginTop="16dp"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,7 +22,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:src="@mipmap/ic_launcher"
+            android:src="@mipmap/canhga"
             android:scaleType="fitCenter"
             android:layout_marginTop="32dp"
             />
@@ -51,7 +51,7 @@
                 android:textSize="16sp"
                 android:padding="0dp"
                 android:gravity="center"
-                android:backgroundTint="@color/gray1"/>
+                android:backgroundTint="@color/BeauBlue"/>
 
             <TextView
                 android:layout_width="60dp"
@@ -69,7 +69,7 @@
                 android:textSize="16sp"
                 android:padding="0dp"
                 android:gravity="center"
-                android:backgroundTint="@color/gray1"
+                android:backgroundTint="@color/BeauBlue"
                 />
 
         </LinearLayout>
@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:text="Quay lại"
                 android:textSize="20sp"
-                android:backgroundTint="@color/blue"
+                android:backgroundTint="@color/BlizzardBlue"
                 android:layout_marginRight="6dp"/>
 
             <Button
@@ -99,12 +99,11 @@
                 android:layout_height="wrap_content"
                 android:text="Thêm"
                 android:textSize="20sp"
-                android:backgroundTint="@color/purple"
+                android:backgroundTint="@color/Aero"
                 android:layout_marginLeft="6dp"
                 />
 
         </LinearLayout>
-
 
     </LinearLayout>
 

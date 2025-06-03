@@ -22,7 +22,7 @@
             android:id="@+id/bottomNavigate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/da"
+            android:background="@color/BabyPowder"
            >
 
             <Button
@@ -34,7 +34,7 @@
                 android:gravity="center"
                 android:text="Trang chủ"
                 android:textColor="@color/material_dynamic_neutral50"
-                android:backgroundTint="@color/da"
+                android:backgroundTint="@color/BabyPowder"
                 android:padding="6dp"/>
 
             <Button
@@ -46,7 +46,7 @@
                 android:gravity="center"
                 android:text="Thực đơn"
                 android:textColor="@color/material_dynamic_neutral50"
-                android:backgroundTint="@color/da"
+                android:backgroundTint="@color/BabyPowder"
                 android:padding="6dp"/>
 
             <Button
@@ -58,7 +58,7 @@
                 android:gravity="center"
                 android:text="Giỏ hàng"
                 android:textColor="@color/material_dynamic_neutral50"
-                android:backgroundTint="@color/da"
+                android:backgroundTint="@color/BabyPowder"
                 android:padding="6dp"/>
 
             <Button
@@ -70,7 +70,7 @@
                 android:gravity="center"
                 android:text="Tài khoản"
                 android:textColor="@color/material_dynamic_neutral50"
-                android:backgroundTint="@color/da"
+                android:backgroundTint="@color/BabyPowder"
                 android:padding="6dp"/>
 
         </LinearLayout>

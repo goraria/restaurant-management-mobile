@@ -10,7 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.restaurantmanagementapp.CategoryManagementFragment
+//import com.example.restaurantmanagementapp.CategoryManagementFragment
 import com.example.restaurantmanagementapp.MenuFragment
 import com.example.restaurantmanagementapp.MenuManagementFragment
 import com.example.restaurantmanagementapp.R
@@ -60,7 +60,7 @@ class ManagementFragment : Fragment() {
                 }
                 R.id.nav_menu_2 -> {
                     updateToolbarTitle("Danh mục")
-                    loadFragment(CategoryManagementFragment())
+//                    loadFragment(CategoryManagementFragment())
                 }
                 R.id.nav_menu_3 -> {
                     updateToolbarTitle("Công thức")
