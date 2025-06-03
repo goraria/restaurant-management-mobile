@@ -7,10 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-data class Category(
-    val name: String,
-    val imageResId: Int
-)
+//data class Category(
+//    val name: String,
+//    val imageResId: Int
+//)
 
 class MenuCategoryAdapter(
     private val categories: List<Category>,
@@ -31,7 +31,7 @@ class MenuCategoryAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val category = categories[position]
         holder.categoryName.text = category.name
-        holder.categoryImage.setImageResource(category.imageResId)
+//        holder.categoryImage.setImageResource(category.imageResId)
         
         holder.itemView.setOnClickListener {
             onCategoryClick(category)
