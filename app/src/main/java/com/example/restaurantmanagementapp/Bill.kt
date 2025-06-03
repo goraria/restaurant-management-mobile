@@ -40,7 +40,8 @@ class Bill : AppCompatActivity() {
                 soLuong = 3,
                 desc= "Gà rán vàng ruộm, béo ngậy.",
                 price = 299_000,
-                imgid = R.mipmap.canhga
+//                imgid = R.mipmap.chips_m
+
             )
         )
 

@@ -31,7 +31,7 @@ class MenuFragment : Fragment() {
         recyclerFood.layoutManager = LinearLayoutManager(requireContext())
 
         // Gắn Adapter
-        recyclerCategory.adapter = CategoryAdapter(getCategories())
+//        recyclerCategory.adapter = CategoryAdapter(getCategories())
         recyclerFood.adapter = FoodAdapter(getFoods()) { food ->
             val intent = Intent(requireContext(), FoodDetail::class.java).apply {
                 putExtra("foodName", food.name)
@@ -45,9 +45,8 @@ class MenuFragment : Fragment() {
 
     private fun getFoods(): List<Food> {
         return listOf(
-            Food("Gà rán", "Đùi gà và cánh gà", 99000, R.mipmap.canhga,""),
-
-            )
+//            Food("Gà rán", "Đùi gà và cánh gà", 99000, R.mipmap.canhga),
+        )
     }
 
     private fun getCategories(): List<Category> {

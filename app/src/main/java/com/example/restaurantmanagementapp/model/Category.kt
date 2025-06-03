@@ -1,3 +1,4 @@
+
 //package com.example.restaurantmanagementapp.model
 //
 //import kotlinx.serialization.Serializable
@@ -11,3 +12,4 @@
 //    val createdAt: String? = null,
 //    val updatedAt: String? = null
 //)
+

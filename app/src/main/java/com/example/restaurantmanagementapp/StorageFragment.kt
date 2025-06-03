@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +15,29 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.restaurantmanagementapp.config.Database
+import com.example.restaurantmanagementapp.model.Ingredient
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import io.github.jan.supabase.postgrest.postgrest
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -71,19 +89,17 @@ class StorageFragment : Fragment() {
 
         // Khởi tạo RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
-        
+
         // Khởi tạo adapter với dữ liệu mẫu và callbacks
         adapter = StorageAdapter(
-            items = getSampleData().toMutableList(),
-            onInputQuantity = { item, quantity ->
-                updateItemQuantity(item, quantity)
-            },
-            onEditItem = { item ->
-                showEditDialog(item)
-            },
+            items = mutableListOf(),
+            onInputQuantity = { item, quantity -> updateItemQuantity(item, quantity) },
+            onEditItem = { item -> showEditDialog(item) },
             context = requireContext()
         )
         recyclerView.adapter = adapter
+
+        fetchIngredientsFromSupabase()
 
         // Cập nhật thông tin tổng quan
         updateOverview()
@@ -109,141 +125,131 @@ class StorageFragment : Fragment() {
         return view
     }
 
+    private fun fetchIngredientsFromSupabase() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val result = Database.client.postgrest["ingredients"].select()
+                val ingredients = result.decodeList<Ingredient>()
+                adapter.updateItems(ingredients)
+                updateOverview()
+            } catch (e: Exception) {
+                Toast.makeText(context, "Lỗi khi tải dữ liệu kho", Toast.LENGTH_SHORT).show()
+                Log.e("StorageFragment", "fetchIngredientsFromSupabase error", e)
+            }
+        }
+    }
+
     private fun updateOverview() {
         val items = adapter.getItems()
         val totalProducts = items.size
-        val lowStockItems = items.count { it.status == "Sắp hết" }
-        
+        val lowStockItems = items.count { (it.quantity ?: 0.0) <= 10 }
         tvTotalProducts.text = "Tổng số sản phẩm: $totalProducts"
         tvLowStock.text = "Sản phẩm sắp hết: $lowStockItems"
     }
 
-    private fun showAddEditDialog(item: StorageItem?) {
+    private fun showAddEditDialog(item: Ingredient?) {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_storage_item, null)
-        val dialog = AlertDialog.Builder(requireContext())
-            .setTitle(if (item == null) "Thêm sản phẩm mới" else "Sửa sản phẩm")
-            .setView(dialogView)
-            .setPositiveButton("Lưu") { _, _ ->
-                val productName = dialogView.findViewById<TextInputEditText>(R.id.et_product_name).text.toString()
-                val quantity = dialogView.findViewById<TextInputEditText>(R.id.et_quantity).text.toString().toIntOrNull() ?: 0
-                val unit = dialogView.findViewById<TextInputEditText>(R.id.et_unit).text.toString()
-                val note = dialogView.findViewById<TextInputEditText>(R.id.et_note).text.toString()
-
-                if (productName.isBlank() || quantity <= 0 || unit.isBlank()) {
-                    Toast.makeText(context, "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show()
-                    return@setPositiveButton
-                }
-
-                if (item == null) {
-                    // Thêm mới
-                    adapter.addItem(StorageItem(productName, quantity, unit, getStatus(quantity)))
-                } else {
-                    // Cập nhật
-                    adapter.updateItem(item.copy(
-                        productName = productName,
-                        quantity = quantity,
-                        unit = unit,
-                        status = getStatus(quantity)
-                    ))
-                }
-                updateOverview()
-            }
-            .setNegativeButton("Hủy", null)
-            .create()
+        val etProductName = dialogView.findViewById<TextInputEditText>(R.id.et_product_name)
+        val etQuantity = dialogView.findViewById<TextInputEditText>(R.id.et_quantity)
+        val etUnit = dialogView.findViewById<TextInputEditText>(R.id.et_unit)
+        val etNote = dialogView.findViewById<TextInputEditText>(R.id.et_note)
 
         // Nếu là sửa, điền thông tin cũ
         item?.let {
-            dialogView.findViewById<TextInputEditText>(R.id.et_product_name).setText(it.productName)
-            dialogView.findViewById<TextInputEditText>(R.id.et_quantity).setText(it.quantity.toString())
-            dialogView.findViewById<TextInputEditText>(R.id.et_unit).setText(it.unit)
+            etProductName.setText(it.name)
+            etQuantity.setText(it.quantity?.toInt()?.toString() ?: "")
+            etUnit.setText(it.unit)
         }
 
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle(if (item == null) "Thêm sản phẩm mới" else "Sửa sản phẩm")
+            .setView(dialogView)
+            .setPositiveButton("Lưu", null) // Để custom validate
+            .setNegativeButton("Hủy", null)
+            .create()
+
+        dialog.setOnShowListener {
+            val btn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            btn.setOnClickListener {
+                val productName = etProductName.text?.toString()?.trim() ?: ""
+                val quantity = etQuantity.text?.toString()?.toDoubleOrNull() ?: 0.0
+                val unit = etUnit.text?.toString()?.trim() ?: ""
+                // val note = etNote.text?.toString() // Nếu cần dùng ghi chú
+
+                if (productName.isBlank() || quantity <= 0 || unit.isBlank()) {
+                    Toast.makeText(context, "Vui lòng điền đầy đủ thông tin hợp lệ", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                if (item == null) {
+                    addIngredientToSupabase(productName, quantity, unit)
+                } else {
+                    updateIngredientToSupabase(item, productName, quantity, unit)
+                }
+                dialog.dismiss()
+            }
+        }
         dialog.show()
     }
 
-    private fun updateItemQuantity(item: StorageItem, additionalQuantity: Int) {
+    private fun addIngredientToSupabase(name: String, quantity: Double, unit: String) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val newIngredient = Ingredient().apply {
+                    this.name = name
+                    this.quantity = quantity
+                    this.unit = unit
+                }
+                Database.client.postgrest["ingredients"].insert(newIngredient)
+                fetchIngredientsFromSupabase()
+                Toast.makeText(context, "Đã thêm sản phẩm", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(context, "Lỗi khi thêm sản phẩm", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun updateIngredientToSupabase(item: Ingredient, name: String, quantity: Double, unit: String) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val updateMap = mapOf(
+                    "name" to name,
+                    "quantity" to quantity,
+                    "unit" to unit
+                )
+                Database.client.postgrest["ingredients"]
+                    .update(updateMap) {
+                        filter { item.ingredient_id?.let { eq("ingredient_id", it) } }
+                    }
+                fetchIngredientsFromSupabase()
+                Toast.makeText(context, "Đã cập nhật sản phẩm", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(context, "Lỗi khi cập nhật sản phẩm", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun updateItemQuantity(item: Ingredient, additionalQuantity: Double) {
         if (additionalQuantity <= 0) {
             Toast.makeText(context, "Số lượng nhập phải lớn hơn 0", Toast.LENGTH_SHORT).show()
             return
         }
-
-        val newQuantity = item.quantity + additionalQuantity
-        adapter.updateItem(item.copy(
-            quantity = newQuantity,
-            status = getStatus(newQuantity)
-        ))
-        updateOverview()
-        Toast.makeText(context, "Đã cập nhật số lượng", Toast.LENGTH_SHORT).show()
+        val newQuantity = (item.quantity ?: 0.0) + additionalQuantity
+        updateIngredientToSupabase(item, item.name ?: "", newQuantity, item.unit ?: "")
     }
 
-    private fun getStatus(quantity: Int): String {
-        return if (quantity <= 10) "Sắp hết" else "Đủ"
-    }
-
-    private fun getSampleData(): List<StorageItem> {
-        return listOf(
-            StorageItem("Gạo", 100, "kg", "Đủ"),
-            StorageItem("Thịt heo", 50, "kg", "Đủ"),
-            StorageItem("Rau cải", 20, "kg", "Sắp hết"),
-            StorageItem("Nước mắm", 15, "chai", "Đủ"),
-            StorageItem("Dầu ăn", 10, "chai", "Sắp hết"),
-            StorageItem("Muối", 30, "kg", "Đủ"),
-            StorageItem("Đường", 25, "kg", "Đủ"),
-            StorageItem("Hành lá", 5, "kg", "Sắp hết")
-        )
-    }
-
-    private fun showEditDialog(item: StorageItem) {
-        try {
-            val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_storage_item, null)
-            
-            // Điền thông tin hiện tại vào dialog
-            dialogView.findViewById<TextInputEditText>(R.id.et_product_name)?.setText(item.productName)
-            dialogView.findViewById<TextInputEditText>(R.id.et_unit)?.setText(item.unit)
-            
-            // Ẩn ô nhập số lượng và ghi chú vì không cho phép sửa
-            dialogView.findViewById<TextInputLayout>(R.id.layout_quantity)?.visibility = View.GONE
-            dialogView.findViewById<TextInputLayout>(R.id.et_note)?.visibility = View.GONE
-
-            AlertDialog.Builder(requireContext())
-                .setTitle("Sửa thông tin sản phẩm")
-                .setView(dialogView)
-                .setPositiveButton("Lưu") { _, _ ->
-                    try {
-                        val productName = dialogView.findViewById<TextInputEditText>(R.id.et_product_name)
-                            ?.text?.toString() ?: ""
-                        val unit = dialogView.findViewById<TextInputEditText>(R.id.et_unit)
-                            ?.text?.toString() ?: ""
-
-                        if (productName.isBlank() || unit.isBlank()) {
-                            Toast.makeText(context, "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show()
-                            return@setPositiveButton
-                        }
-
-                        // Cập nhật thông tin sản phẩm (giữ nguyên số lượng)
-                        adapter.updateItem(item.copy(
-                            productName = productName,
-                            unit = unit
-                        ))
-                        Toast.makeText(context, "Đã cập nhật thông tin sản phẩm", Toast.LENGTH_SHORT).show()
-                    } catch (e: Exception) {
-                        Toast.makeText(context, "Có lỗi xảy ra khi cập nhật thông tin", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                .setNegativeButton("Hủy", null)
-                .show()
-        } catch (e: Exception) {
-            Toast.makeText(context, "Có lỗi xảy ra khi mở dialog sửa", Toast.LENGTH_SHORT).show()
-        }
+    private fun showEditDialog(item: Ingredient) {
+        showAddEditDialog(item)
     }
 
     private fun filterItems(query: String) {
+        val allItems = adapter.getItems()
         val filteredList = if (query.isEmpty()) {
-            getSampleData()
+            allItems
         } else {
-            getSampleData().filter {
-                it.productName.contains(query, ignoreCase = true) ||
-                it.unit.contains(query, ignoreCase = true)
+            allItems.filter {
+                (it.name ?: "").contains(query, ignoreCase = true) ||
+                (it.unit ?: "").contains(query, ignoreCase = true)
             }
         }
         adapter.updateItems(filteredList)
@@ -268,21 +274,50 @@ class StorageFragment : Fragment() {
                 }
             }
     }
-}
 
-// Data class cho item tồn kho
-data class StorageItem(
-    val productName: String,
-    val quantity: Int,
-    val unit: String,
-    val status: String
-)
+    @Composable
+    fun getIngredients(): List<Ingredient> {
+        var ingredients by remember { mutableStateOf<List<Ingredient>>(emptyList()) }
+//        return adapter.getItems()
+        LaunchedEffect(Unit) {
+            try {
+                Log.d("IngredientList", "Starting API call...")
+                val result = Database.client.postgrest["ingredients"].select()
+                ingredients = result.decodeList<Ingredient>()
+                Log.d("IngredientList", "Fetched ${ingredients.size}")
+                ingredients.forEach { ingredient ->
+                    Log.d("IngredientList", "Ingredient: ${ingredient.name}")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        LazyColumn {
+            items(
+                items = ingredients,
+                key = { ingredient -> ingredient.ingredient_id!! }
+            ) { ingredient ->
+                Text(
+                    text = "${ingredient.name}",
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+            if (ingredients.isEmpty()) {
+                item {
+                    Text("Không có nguyên liệu", modifier = Modifier.padding(8.dp))
+                }
+            }
+        }
+        return ingredients
+    }
+}
 
 // Adapter cho RecyclerView
 class StorageAdapter(
-    private var items: MutableList<StorageItem>,
-    private val onInputQuantity: (StorageItem, Int) -> Unit,
-    private val onEditItem: (StorageItem) -> Unit,
+    private var items: MutableList<Ingredient>,
+    private val onInputQuantity: (Ingredient, Double) -> Unit,
+    private val onEditItem: (Ingredient) -> Unit,
     private val context: Context
 ) : RecyclerView.Adapter<StorageAdapter.ViewHolder>() {
 
@@ -303,16 +338,13 @@ class StorageAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        holder.tvProductName.text = item.productName
-        holder.tvQuantity.text = item.quantity.toString()
-        holder.tvUnit.text = item.unit
-        
-        // Đổi màu status dựa vào trạng thái
+        holder.tvProductName.text = item.name ?: ""
+        holder.tvQuantity.text = item.quantity?.toInt()?.toString() ?: "0"
+        holder.tvUnit.text = item.unit ?: ""
+
+        val status = if ((item.quantity ?: 0.0) <= 10) "Sắp hết" else "Đủ"
         holder.viewStatus.setBackgroundResource(
-            when (item.status) {
-                "Sắp hết" -> R.drawable.status_background_red
-                else -> R.drawable.status_background_green
-            }
+            if (status == "Sắp hết") R.drawable.status_background_red else R.drawable.status_background_green
         )
 
         // Xử lý nhập thêm hàng
@@ -326,19 +358,21 @@ class StorageAdapter(
         }
     }
 
-    private fun showAddStockDialog(item: StorageItem) {
+    private fun showAddStockDialog(item: Ingredient) {
         val dialogView = LayoutInflater.from(context)
             .inflate(R.layout.dialog_add_stock, null)
-        
-        dialogView.findViewById<TextView>(R.id.tv_product_name).text = 
-            "Nhập thêm hàng cho: ${item.productName}"
+
+        dialogView.findViewById<TextView>(R.id.tv_product_name).text =
+            "Nhập thêm hàng cho: ${item.name}"
+
+        val etAddQuantity = dialogView.findViewById<TextInputEditText>(R.id.et_add_quantity)
+        etAddQuantity.inputType = android.text.InputType.TYPE_CLASS_NUMBER or android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
 
         AlertDialog.Builder(context)
             .setTitle("Nhập thêm hàng")
             .setView(dialogView)
             .setPositiveButton("Xác nhận") { _, _ ->
-                val quantity = dialogView.findViewById<TextInputEditText>(R.id.et_add_quantity)
-                    .text.toString().toIntOrNull() ?: 0
+                val quantity = etAddQuantity.text.toString().toDoubleOrNull() ?: 0.0
                 if (quantity > 0) {
                     onInputQuantity(item, quantity)
                 } else {
@@ -357,20 +391,20 @@ class StorageAdapter(
 
     fun getItems() = items.toList()
 
-    fun addItem(item: StorageItem) {
+    fun addItem(item: Ingredient) {
         items.add(item)
         notifyItemInserted(items.size - 1)
     }
 
-    fun updateItem(item: StorageItem) {
-        val position = items.indexOfFirst { it.productName == item.productName }
+    fun updateItem(item: Ingredient) {
+        val position = items.indexOfFirst { it.ingredient_id == item.ingredient_id }
         if (position != -1) {
             items[position] = item
             notifyItemChanged(position)
-            }
+        }
     }
 
-    fun updateItems(newItems: List<StorageItem>) {
+    fun updateItems(newItems: List<Ingredient>) {
         items.clear()
         items.addAll(newItems)
         notifyDataSetChanged()
