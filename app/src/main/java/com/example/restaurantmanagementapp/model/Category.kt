@@ -5,9 +5,9 @@ import java.time.OffsetDateTime
 
 @Serializable
 data class Category(
-    val categoryId: Long? = null,
-    val categoryName: String,
+    val category_id: Long? = null,
+    val category_name: String,
     val type: String,
-    val createdAt: OffsetDateTime? = null,
-    val updatedAt: OffsetDateTime? = null
+//    val created_at: DateTime? = null,
+//    val updated_at: OffsetDateTime? = null
 ) 
