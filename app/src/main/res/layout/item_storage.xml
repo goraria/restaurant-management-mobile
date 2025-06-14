@@ -51,18 +51,10 @@
         <!-- Trạng thái -->
         <View
             android:id="@+id/view_status"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
             android:layout_marginHorizontal="12dp"
-            android:background="@drawable/status_background_green" />
-
-<!--        <View-->
-<!--            android:id="@+id/view_status"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="24dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:layout_marginHorizontal="4dp"-->
-<!--            android:background="@drawable/status_background_green" />-->
+            android:background="@drawable/dot_green" />
 
         <!-- Thao tác -->
         <LinearLayout
@@ -93,4 +85,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</androidx.cardview.widget.CardView> 
+</androidx.cardview.widget.CardView>
