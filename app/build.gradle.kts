@@ -116,6 +116,9 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.material3)
 
+    implementation("org.mindrot:jbcrypt:0.4")
+
+
 
 
 }
