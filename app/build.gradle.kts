@@ -116,6 +116,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.material3)
 
-
+    // new dependencies
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 
 }
