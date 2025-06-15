@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 1. Khi bàn được kích hoạt (activated = true) → nền Aero -->
+    <item android:state_activated="true">
+        <shape android:shape="rectangle">
+            <!-- fill màu Aero -->
+            <solid android:color="@color/Aero" />
+            <!-- viền cùng tông đậm hơn để nổi bật -->
+            <stroke
+                android:width="2dp"
+                android:color="@color/white" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+
+    <!-- 2. Mặc định (activated = false) → nền trắng, viền Aero -->
+    <item>
+        <shape android:shape="rectangle">
+            <!-- fill màu trắng -->
+            <solid android:color="@color/azure" />
+            <!-- viền màu Aero -->
+            <stroke
+                android:width="2dp"
+                android:color="@color/Aero" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+
+</selector>

@@ -96,6 +96,64 @@
             android:layout_marginRight="64dp"
             />
 
+        <TextView
+            android:id="@+id/tvemail_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Email:"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/tv_role"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            />
+
+        <TextView
+            android:id="@+id/tvemail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="phuong21cn3@gmail.com"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            app:layout_constraintTop_toBottomOf="@id/tvemail_label"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="64dp"
+            android:layout_marginRight="64dp"
+            />
+
+        <TextView
+            android:id="@+id/tvphone_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Số điện thoại:"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/tvemail"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            />
+
+        <TextView
+            android:id="@+id/tvphone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="6666"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            app:layout_constraintTop_toBottomOf="@id/tvphone_label"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="64dp"
+            android:layout_marginRight="64dp"
+            />
+
         <Button
             android:id="@+id/btnedit"
             android:layout_width="wrap_content"

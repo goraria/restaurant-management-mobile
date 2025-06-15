@@ -45,7 +45,7 @@ class MenuFragment : Fragment() {
 
     private fun getFoods(): List<Food> {
         return listOf(
-//            Food("Gà rán", "Đùi gà và cánh gà", 99000, R.mipmap.canhga),
+            Food("Gà rán", "Đùi gà và cánh gà", 99000, R.mipmap.canhga,""),
         )
     }
 

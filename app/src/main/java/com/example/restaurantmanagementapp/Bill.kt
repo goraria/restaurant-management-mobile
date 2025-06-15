@@ -1,53 +1,60 @@
 package com.example.restaurantmanagementapp
 
 import android.os.Bundle
-import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.restaurantmanagementapp.FoodBillAdapter
-import com.example.restaurantmanagementapp.MonAn
-import com.example.restaurantmanagementapp.R
-
+import com.example.restaurantmanagementapp.repository.BillRepository
+import kotlinx.coroutines.launch
 
 class Bill : AppCompatActivity() {
-
-    private lateinit var adapter: FoodBillAdapter
+    private lateinit var adapter: CartViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.bill_detail)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewMonAn)
+        val txtTotal = findViewById<TextView>(R.id.tvcost)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        adapter = FoodBillAdapter(mutableListOf())
-        recyclerView.adapter = adapter
+        // Lấy id bàn từ intent
+        val tableId = intent.getIntExtra("tableId", -1)
+        if (tableId == -1) {
+            Toast.makeText(this, "Không xác định được bàn!", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
 
-        adapter.addMonAn(
-            MonAn(
-                name = "Cánh gà",
-                soLuong = 6,
-                desc= "Cánh gà chiên giòn, ngon tuyệt vời.",
-                price = 666_666,
-                imgid = R.mipmap.canhga
-            )
-        )
-        adapter.addMonAn(
-            MonAn(
-                name = "Gà rán",
-                soLuong = 3,
-                desc= "Gà rán vàng ruộm, béo ngậy.",
-                price = 299_000,
-//                imgid = R.mipmap.chips_m
+        // Lấy dữ liệu cart từ database cho bàn này
+        lifecycleScope.launch {
+            val cartItems = BillRepository.getCartByTableId(tableId)
+            if (cartItems.isEmpty()) {
+                Toast.makeText(this@Bill, "Không có món nào trong giỏ hàng!", Toast.LENGTH_SHORT).show()
+                finish()
+                return@launch
+            }
 
-            )
-        )
+            // Chuyển sang list MonAn để đưa vào adapter
+            val monAnList = cartItems.map {
+                MonAn(
+                    name = it.productName,
+                    soLuong = it.quantity,
+                    desc = "",
+                    price = it.productPrice.toInt(),
+                    imgid = R.drawable.ic_launcher_foreground // Sửa nếu bạn dùng imageUrl thực
+                )
+            }
 
-        val btnThanhToan = findViewById<Button>(R.id.btncheckout)
-        btnThanhToan.setOnClickListener {
-            Toast.makeText(this, "Thanh toán chưa làm :)", Toast.LENGTH_SHORT).show()
+            adapter = CartViewAdapter(monAnList)
+            recyclerView.adapter = adapter
+
+            // Tính tổng tiền và hiển thị
+            val total = cartItems.sumOf { it.productPrice * it.quantity }
+            txtTotal.text = "Tổng: ${"%,.0f".format(total)} đ"
         }
     }
 }
