@@ -3,7 +3,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Table(
-    val table_id: Int,
+    val table_id: Long,
     val name: String,
     val chair_number: Int,
     val status: Boolean

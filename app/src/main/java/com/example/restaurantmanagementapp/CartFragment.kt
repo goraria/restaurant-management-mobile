@@ -31,26 +31,6 @@ class CartFragment : Fragment() {
     private val cartItems = mutableListOf<CartItem>()
     private val foods = mutableListOf<Food>()
 
-    // Khởi launcher để nhận kết quả từ FoodDetail
-//    private val foodDetailLauncher = registerForActivityResult(
-//        ActivityResultContracts.StartActivityForResult()
-//    ) { result ->
-//        if (result.resultCode == Activity.RESULT_OK) {
-//            result.data?.let { data ->
-//                val name = data.getStringExtra("name") ?: return@let
-//                val desc = data.getStringExtra("desc") ?: ""
-//                val price = data.getIntExtra("price", 0).toDouble()
-//                val quantity = data.getIntExtra("quantity", 1)
-//                val item = CartItem(
-//
-//                )
-//                cartItems.add(item)
-//                cartAdapter.notifyItemInserted(cartItems.size - 1)
-//                rvCartItems.scrollToPosition(cartItems.lastIndex)
-//                updateTotalCost()
-//            }
-//        }
-//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,7 +53,8 @@ class CartFragment : Fragment() {
 
         // Load cart items và foods từ repository
         CoroutineScope(Dispatchers.Main).launch {
-            val tableId = 1L // hoặc lấy từ user/session
+            var tableId = com.example.restaurantmanagementapp.util.TableSession.currentTableId
+            CartItemRepository.updateTableStatusByCart(tableId)
             val cartList = CartItemRepository.getCartItemByTableAndPaid(tableId, false)
             val foodList = CartItemRepository.getFoodsInCartByTableLoop(tableId)
             cartItems.clear()
@@ -86,11 +67,6 @@ class CartFragment : Fragment() {
             updateTotalCost()
         }
 
-        rvCartItems.layoutManager = LinearLayoutManager(requireContext())
-        rvCartItems.adapter = cartAdapter
-
-
-
         btnAdd.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, MenuFragment())
@@ -100,13 +76,13 @@ class CartFragment : Fragment() {
 
         // Nút Thanh toán
         btnPay.setOnClickListener {
-            if (tableNumber == 0) {
-                Toast.makeText(requireContext(), "Không xác định được bàn!", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            val intent = Intent(requireContext(), Bill::class.java)
-            intent.putExtra("tableId", tableNumber) // truyền tableNumber sang Bill với key là "tableId"
-            startActivity(intent)        
+//            if (tableNumber == 0) {
+//                Toast.makeText(requireContext(), "Không xác định được bàn!", Toast.LENGTH_SHORT).show()
+//                return@setOnClickListener
+//            }
+//            val intent = Intent(requireContext(), Bill::class.java)
+//            intent.putExtra("tableId", tableNumber) // truyền tableNumber sang Bill với key là "tableId"
+//            startActivity(intent)
             
             ////////////////////////////////////////////////////////////////////////////////////////////////
             
