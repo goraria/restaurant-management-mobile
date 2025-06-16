@@ -6,17 +6,10 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
-data class Food(
-    val name: String,
-    val description: String,
-    val price: Int,
-    val imageResId: Int,
-    val category: String
-)
-
-class FoodAdapter(private val foodList: List<Food>,
-                  private val onFoodClick: (Food) -> Unit) :
+class FoodAdapter(private val foodList: List<com.example.restaurantmanagementapp.model.Food>,
+                  private val onFoodClick: (com.example.restaurantmanagementapp.model.Food) -> Unit) :
     RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
 
     class FoodViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -34,11 +27,23 @@ class FoodAdapter(private val foodList: List<Food>,
 
     override fun onBindViewHolder(holder: FoodViewHolder, position: Int) {
         val food = foodList[position]
-        holder.foodName.text = food.name
-        holder.foodDesc.text = food.description
-        holder.foodPrice.text = "${food.price} đ"
-        holder.foodImage.setImageResource(food.imageResId)
-
+        holder.foodName.text = food.name ?: ""
+        holder.foodDesc.text = food.description ?: ""
+        holder.foodPrice.text = food.price?.let { "%,.0f $".format(it) } ?: ""
+        // Load ảnh từ resource nội bộ bằng tên (ưu tiên mipmap, fallback drawable)
+        val context = holder.foodImage.context
+        val resId = if (!food.image_url.isNullOrBlank()) {
+            var id = context.resources.getIdentifier(food.image_url, "mipmap", context.packageName)
+            if (id == 0) {
+                id = context.resources.getIdentifier(food.image_url, "drawable", context.packageName)
+            }
+            id
+        } else 0
+        if (resId != 0) {
+            holder.foodImage.setImageResource(resId)
+        } else {
+            holder.foodImage.setImageResource(R.drawable.ic_launcher_foreground)
+        }
         holder.foodImage.setOnClickListener {
             onFoodClick(food)
         }
