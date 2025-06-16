@@ -56,6 +56,7 @@ class MenuFragment : Fragment() {
         }
     }
 
+
     private fun loadFoodsFromSupabase(onResult: (List<Food>) -> Unit) {
         viewLifecycleOwner.lifecycleScope.launch {
             try {

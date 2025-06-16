@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +24,9 @@ class CartFragment : Fragment() {
     private lateinit var btnPay: Button
     private lateinit var rvCartItems: RecyclerView
     private lateinit var cartAdapter: CartItemAdapter
+
+    private var tableNumber: Int = 0
+    private var hasNotifiedHome = false
 
     private val cartItems = mutableListOf<CartItem>()
     private val foods = mutableListOf<Food>()
@@ -56,6 +60,11 @@ class CartFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_cart, container, false)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        tableNumber = arguments?.getInt("tableNumber") ?: 0
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         btnPay = view.findViewById(R.id.btnPay)
@@ -77,6 +86,11 @@ class CartFragment : Fragment() {
             updateTotalCost()
         }
 
+        rvCartItems.layoutManager = LinearLayoutManager(requireContext())
+        rvCartItems.adapter = cartAdapter
+
+
+
         btnAdd.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, MenuFragment())
@@ -86,6 +100,16 @@ class CartFragment : Fragment() {
 
         // Nút Thanh toán
         btnPay.setOnClickListener {
+            if (tableNumber == 0) {
+                Toast.makeText(requireContext(), "Không xác định được bàn!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val intent = Intent(requireContext(), Bill::class.java)
+            intent.putExtra("tableId", tableNumber) // truyền tableNumber sang Bill với key là "tableId"
+            startActivity(intent)        
+            
+            ////////////////////////////////////////////////////////////////////////////////////////////////
+            
             CoroutineScope(Dispatchers.Main).launch {
                 // Cập nhật quantity và paid=true cho tất cả cart item
                 var allSuccess = true
@@ -108,6 +132,24 @@ class CartFragment : Fragment() {
                     Toast.makeText(requireContext(), "Có lỗi khi cập nhật giỏ hàng!", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+        // Cập nhật tổng tiền lần đầu
+        updateTotalCost()
+    }
+
+    private fun addSelectedFood(food: Food) {
+        // … thêm vào repository, adapter, update total …
+
+        // Chỉ notify HomeFragment 1 lần (lần đầu)
+        if (!hasNotifiedHome) {
+            hasNotifiedHome = true
+            parentFragmentManager.setFragmentResult(
+                "tableStatusChanged",
+                bundleOf(
+                    "tableNumber" to tableNumber,
+                    "isOccupied" to true
+                )
+            )
         }
     }
 
