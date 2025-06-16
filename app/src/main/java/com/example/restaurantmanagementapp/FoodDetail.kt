@@ -45,6 +45,8 @@ class FoodDetail : AppCompatActivity() {
 
         // Lấy thông tin món ăn từ Intent
         val foodID = intent.getLongExtra("foodID", -1L)
+        val tableId = com.example.restaurantmanagementapp.util.TableSession.currentTableId
+        Log.d("MenuFragment", "Global tableId: $tableId")
         val foodName = intent.getStringExtra("foodName") ?: ""
         val foodDesc = intent.getStringExtra("foodDesc") ?: ""
         val foodPrice = intent.getDoubleExtra("foodPrice", 0.0)
@@ -96,7 +98,6 @@ class FoodDetail : AppCompatActivity() {
         // Sự kiện Order: trả về kết quả cho CartFragment
         btnOrder.setOnClickListener {
             val quantityValue = tvQuantity.text.toString().toIntOrNull() ?: 1
-            val tableId = 1L // hoặc lấy từ user/session
             lifecycleScope.launch {
                 val cartItems = CartItemRepository.getCartItemByTableAndPaid(tableId, false)
                 val existingCartItem = cartItems.find { it.menu_id == foodID }

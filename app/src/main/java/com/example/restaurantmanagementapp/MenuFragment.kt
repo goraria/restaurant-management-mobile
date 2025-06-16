@@ -32,6 +32,8 @@ class MenuFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Lấy tableId toàn cục nếu cần
+        val tableId = com.example.restaurantmanagementapp.util.TableSession.currentTableId
         val recyclerCategory = view.findViewById<RecyclerView>(R.id.recyclerCategory)
         val recyclerFood = view.findViewById<RecyclerView>(R.id.recyclerFood)
 
@@ -47,8 +49,8 @@ class MenuFragment : Fragment() {
                     putExtra("foodName", food.name)
                     putExtra("foodDesc", food.description)
                     putExtra("foodPrice", food.price)
-                    Log.d("FoodDetail", "imageUrl: ${food.image_url}")
                     putExtra("foodImage", food.image_url)
+                    putExtra("tableID", tableId) // Truyền thêm table_id
                 }
                 startActivity(intent)
 
@@ -61,16 +63,11 @@ class MenuFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 CartItemRepository.getCartItemByTableAndPaid(1,false).forEach { cartItem ->
-                    Log.d("MenuFragment", "CartItem: ${cartItem.menu_id} - ${cartItem.quantity} - ${cartItem.table_id} - ${cartItem.paid}")
                 }
                 val result = withContext(Dispatchers.IO) {
                     Database.client.postgrest["menu"].select()
                 }
                 val foods = result.decodeList<Food>()
-                Log.d("MenuFragment", "Foods loaded: ${foods.size}")
-                foods.forEach { food ->
-                    Log.d("MenuFragment", "Food: ${food.menu_id} - ${food.name} - ${food.price} - ${food.stock} - ${food.image_url} - ${food.created_at} - ${food.updated_at} - ${food.description}")
-                }
                 onResult(foods)
             } catch (e: Exception) {
                 Log.e("MenuFragment", "Error loading foods", e)
