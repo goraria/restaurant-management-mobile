@@ -1,51 +1,255 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".HomeFragment">
 
+    <!-- ==========================
+         1. Thanh tiêu đề (Header)
+       ========================== -->
     <TextView
         android:id="@+id/titleText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
         android:text="Trang chủ"
         android:textAlignment="center"
-        android:textSize="30sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@color/white"
         android:background="@color/Aero"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-        />
-
+    <!-- =====================================
+         2. Khung chứa Avatar + Tên quán
+       ===================================== -->
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/headerInfo"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="64dp"
-        >
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/titleText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/imageAvatar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:src="@mipmap/ic_launcher"
-            android:layout_gravity="center"
-
-            />
+            android:contentDescription="Avatar quán"/>
 
         <TextView
+            android:id="@+id/textRestaurantName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Quán của Phương"
-            android:textSize="30sp"
-            android:layout_gravity="center"
-            android:layout_marginTop="8dp"
-            />
-
-
+            android:textSize="22sp"
+            android:textColor="#333333"
+            android:layout_marginTop="8dp"/>
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tvtable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chọn bàn ăn"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#333333"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/headerInfo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/gridTables"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:columnCount="3"
+        app:layout_constraintTop_toBottomOf="@id/tvtable"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomSpacer"
+        app:rowCount="6"
+        app:useDefaultMargins="true"
+        tools:ignore="MissingClass">
 
-</FrameLayout>
+        <Button
+            android:id="@+id/btnTable1"
+            style="@style/TableButtonStyle"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            app:backgroundTint="@null"
+            android:text="1"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <Button
+            android:id="@+id/btnTable2"
+            style="@style/TableButtonStyle"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            app:backgroundTint="@null"
+            android:text="2"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <Button
+            android:id="@+id/btnTable3"
+            style="@style/TableButtonStyle"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            app:backgroundTint="@null"
+            android:text="3"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <Button
+            android:id="@+id/btnTable4"
+            style="@style/TableButtonStyle"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            app:backgroundTint="@null"
+            android:text="4"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <Button
+            android:id="@+id/btnTable5"
+            style="@style/TableButtonStyle"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            app:backgroundTint="@null"
+            android:text="5"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <Button
+            android:id="@+id/btnTable6"
+            style="@style/TableButtonStyle"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            app:backgroundTint="@null"
+            android:text="6"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <Button
+            android:id="@+id/btnTable7"
+            style="@style/TableButtonStyle"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            app:backgroundTint="@null"
+            android:text="7"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <Button
+            android:id="@+id/btnTable8"
+            style="@style/TableButtonStyle"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            app:backgroundTint="@null"
+            android:text="8"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <Button
+            android:id="@+id/btnTable9"
+            style="@style/TableButtonStyle"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            app:backgroundTint="@null"
+            android:text="9"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <Button
+            android:id="@+id/btnTable10"
+            style="@style/TableButtonStyle"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            app:backgroundTint="@null"
+            android:text="10"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <Button
+            android:id="@+id/btnTable11"
+            style="@style/TableButtonStyle"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            app:backgroundTint="@null"
+            android:text="11"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <Button
+            android:id="@+id/btnTable12"
+            style="@style/TableButtonStyle"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            app:backgroundTint="@null"
+            android:text="12"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+    </androidx.gridlayout.widget.GridLayout>
+
+    <View
+        android:id="@+id/bottomSpacer"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,40 +1,42 @@
-//package com.example.restaurantmanagementapp.repository
-//
-//import com.example.restaurantmanagementapp.model.Food
-//import io.github.jan.supabase.SupabaseClient
-//import io.github.jan.supabase.postgrest.query.Columns
-//import kotlinx.coroutines.flow.Flow
-//import kotlinx.coroutines.flow.flow
-//
-//class FoodRepository {
-//    private val client = SupabaseClient.client
-//
-//    suspend fun getFoods(): Flow<List<Food>> = flow {
-//        try {
-//            val result = client.postgrest["foods"].select {
-//                columns(Columns.raw("*"))
-//            }
-//            val foods = result.decodeList<Food>()
-//            emit(foods)
-//        } catch (e: Exception) {
-//            // Log error
-//            e.printStackTrace()
-//            emit(emptyList())
-//        }
-//    }
-//
-//    suspend fun getFoodById(id: String): Flow<Food?> = flow {
-//        try {
-//            val result = client.postgrest["foods"].select {
-//                columns(Columns.raw("*"))
-//                eq("id", id)
-//            }
-//            val food = result.decodeSingleOrNull<Food>()
-//            emit(food)
-//        } catch (e: Exception) {
-//            // Log error
-//            e.printStackTrace()
-//            emit(null)
-//        }
-//    }
-//}
+package com.example.restaurantmanagementapp.repository
+
+import android.util.Log
+import com.example.restaurantmanagementapp.config.Database
+import com.example.restaurantmanagementapp.model.Food
+import com.example.restaurantmanagementapp.model.User
+import io.github.jan.supabase.postgrest.from
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
+object FoodRepository{
+
+    suspend fun getFoods(): List<User> = withContext(Dispatchers.IO) {
+        val result = Database.client.from("menu").select()
+        result.decodeList<User>()
+    }
+
+    suspend fun addFood(food: User): Boolean = withContext(Dispatchers.IO) {
+        try {
+            Database.client.from("menu").insert(food)
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    suspend fun getFoodById(menuId: Int): Food? = withContext(Dispatchers.IO) {
+    val result = Database.client
+        .from("menu")
+        .select {
+            filter {
+                eq("menu_id", menuId)
+            }
+        }
+        .decodeList<Food>()
+    Log.d("FoodRepository", "Query result for menu_id=$menuId: $result")
+    result.firstOrNull()
+
+
+}
+}

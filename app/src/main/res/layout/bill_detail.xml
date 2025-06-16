@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    >
+
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/titleText"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Hóa đơn"
         android:textAlignment="center"
@@ -16,60 +16,91 @@
         android:textStyle="bold"
         android:textColor="@color/white"
         android:background="@color/Aero"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:padding="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewMonAn"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription="mon an da chon"
         app:layout_constraintTop_toBottomOf="@id/titleText"
-        app:layout_constraintBottom_toTopOf="@+id/rgbill"
+        app:layout_constraintBottom_toTopOf="@+id/llTotal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="mon an da chon"/>
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/llTotal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        app:layout_constraintTop_toBottomOf="@id/recyclerViewMonAn"
+        app:layout_constraintBottom_toTopOf="@id/rgbill"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/tvsum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tổng:"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:layout_marginRight="8dp" />
+
+        <TextView
+            android:id="@+id/tvcost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="666.666 đ"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <RadioGroup
         android:id="@+id/rgbill"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/btncheckout"
-        app:layout_constraintStart_toStartOf="parent"
         android:orientation="horizontal"
-        >
+        app:layout_constraintTop_toBottomOf="@id/llTotal"
+        app:layout_constraintBottom_toTopOf="@id/btncheckout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp">
 
         <RadioButton
-            android:layout_width="140dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="60dp"
             android:text="Tiền mặt"
-            android:textSize="20sp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="16dp"
-            />
+            android:textSize="20sp" />
 
         <RadioButton
-            android:layout_width="190dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Chuyển khoản"
-            android:textSize="20sp"
-            android:layout_marginLeft="20dp"/>
-
+            android:textSize="20sp" />
     </RadioGroup>
 
     <Button
         android:id="@+id/btncheckout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:backgroundTint="@color/blue"
         android:text="Thanh toán"
         android:textSize="20sp"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

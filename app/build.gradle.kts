@@ -94,6 +94,7 @@ dependencies {
     implementation(libs.androidx.foundation.android)
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.gridlayout)
 
     // Testing
 
@@ -116,9 +117,16 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.material3)
 
+
+    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.7.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("org.mindrot:jbcrypt:0.4")
 
-
-
+    // **BẮT BUỘC** phải có để dùng androidx.gridlayout.widget.GridLayout
+    implementation("androidx.gridlayout:gridlayout:1.0.0")
 
 }
+
