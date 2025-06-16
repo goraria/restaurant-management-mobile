@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_card"
+    android:padding="16dp"
+    android:layout_marginBottom="12dp">
+
+    <TextView
+        android:id="@+id/tv_recipe_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ID: 1"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="#222"/>
+
+    <TextView
+        android:id="@+id/tv_recipe_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Món: Phở bò"
+        android:textSize="15sp"
+        android:textColor="#444"
+        android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:id="@+id/tv_recipe_ingredient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nguyên liệu: Bò, Bánh phở"
+        android:textSize="15sp"
+        android:textColor="#444"
+        android:layout_marginTop="2dp"/>
+
+    <TextView
+        android:id="@+id/tv_recipe_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Số lượng: 200g"
+        android:textSize="15sp"
+        android:textColor="#444"
+        android:layout_marginTop="2dp"/>
+
+</LinearLayout>

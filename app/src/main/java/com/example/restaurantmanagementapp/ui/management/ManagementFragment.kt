@@ -10,7 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-//import com.example.restaurantmanagementapp.CategoryManagementFragment
+import com.example.restaurantmanagementapp.EmployeeManagementFragment
 import com.example.restaurantmanagementapp.MenuFragment
 import com.example.restaurantmanagementapp.MenuManagementFragment
 import com.example.restaurantmanagementapp.R
@@ -56,19 +56,19 @@ class ManagementFragment : Fragment() {
             when (menuItem.itemId) {
                 R.id.nav_menu_1 -> {
                     updateToolbarTitle("Thực đơn")
-                    loadFragment(MenuManagementFragment())
+                    loadFragment(RecipeManagementFragment())
                 }
                 R.id.nav_menu_2 -> {
                     updateToolbarTitle("Danh mục")
 //                    loadFragment(CategoryManagementFragment())
                 }
-                R.id.nav_menu_3 -> {
-                    updateToolbarTitle("Công thức")
-                    loadFragment(RecipeManagementFragment())
-                }
                 R.id.nav_menu_4 -> {
                     updateToolbarTitle("Bàn ăn")
                     loadFragment(TableManagementFragment())
+                }
+                R.id.nav_menu_5 -> {
+                    updateToolbarTitle("Nhân viên")
+                    loadFragment(EmployeeManagementFragment())
                 }
             }
             drawerLayout.closeDrawers()
@@ -78,7 +78,7 @@ class ManagementFragment : Fragment() {
         // Load fragment mặc định
         if (savedInstanceState == null) {
             updateToolbarTitle("Thực đơn")
-            loadFragment(MenuManagementFragment())
+            loadFragment(RecipeManagementFragment())
         }
 
         return view
