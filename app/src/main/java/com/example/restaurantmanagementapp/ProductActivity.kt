@@ -21,7 +21,7 @@ class ProductActivity : AppCompatActivity() {
         setupToolbar()
         setupRecyclerView()
         setupSearchBar()
-        setupCartButton()
+//        setupCartButton()
     }
 
     private fun setupToolbar() {
@@ -70,12 +70,12 @@ class ProductActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupCartButton() {
-        binding.fabCart.setOnClickListener {
-            val intent = Intent(this, CartActivity::class.java)
-            startActivity(intent)
-        }
-    }
+//    private fun setupCartButton() {
+//        binding.fabCart.setOnClickListener {
+//            val intent = Intent(this, CartActivity::class.java)
+//            startActivity(intent)
+//        }
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

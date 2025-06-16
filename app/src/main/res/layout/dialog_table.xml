@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <EditText
+        android:id="@+id/edt_table_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tên bàn"
+        android:inputType="textPersonName"
+        android:maxLines="1"
+        android:layout_marginBottom="12dp"/>
+
+    <EditText
+        android:id="@+id/edt_table_chair"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Số ghế"
+        android:inputType="number"
+        android:maxLines="1"
+        android:layout_marginBottom="12dp"/>
+
+    <CheckBox
+        android:id="@+id/cb_table_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đang sử dụng"/>
+
+</LinearLayout>

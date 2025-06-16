@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_card"
+    android:padding="16dp"
+    android:layout_marginBottom="12dp">
+
+    <TextView
+        android:id="@+id/tv_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tên đăng nhập"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="#222"/>
+
+    <TextView
+        android:id="@+id/tv_user_fullname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Họ tên: Nguyễn Văn A"
+        android:textSize="15sp"
+        android:textColor="#444"
+        android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:id="@+id/tv_user_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email: example@email.com"
+        android:textSize="15sp"
+        android:textColor="#444"
+        android:layout_marginTop="2dp"/>
+
+    <TextView
+        android:id="@+id/tv_user_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SĐT: 0123456789"
+        android:textSize="15sp"
+        android:textColor="#444"
+        android:layout_marginTop="2dp"/>
+
+    <TextView
+        android:id="@+id/tv_user_role"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vai trò: Nhân viên"
+        android:textSize="15sp"
+        android:textColor="#444"
+        android:layout_marginTop="2dp"/>
+
+</LinearLayout>

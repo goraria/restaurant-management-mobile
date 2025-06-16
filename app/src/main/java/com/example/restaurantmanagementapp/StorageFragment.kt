@@ -2,6 +2,7 @@ package com.example.restaurantmanagementapp
 
 import android.app.AlertDialog
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,10 +10,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.compose.foundation.layout.padding
@@ -32,11 +37,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.restaurantmanagementapp.config.Database
+import com.example.restaurantmanagementapp.model.Category
 import com.example.restaurantmanagementapp.model.Ingredient
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import io.github.jan.supabase.postgrest.postgrest
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
@@ -61,6 +69,7 @@ class StorageFragment : Fragment() {
     private lateinit var tvLowStock: TextView
     private lateinit var searchLayout: TextInputLayout
     private lateinit var etSearch: TextInputEditText
+    private var categoryList: List<Category> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +79,7 @@ class StorageFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -100,6 +110,7 @@ class StorageFragment : Fragment() {
         recyclerView.adapter = adapter
 
         fetchIngredientsFromSupabase()
+        fetchCategoriesFromSupabase() // Lấy danh sách category trước
 
         // Cập nhật thông tin tổng quan
         updateOverview()
@@ -139,6 +150,17 @@ class StorageFragment : Fragment() {
         }
     }
 
+    private fun fetchCategoriesFromSupabase() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val result = Database.client.postgrest["categories"].select()
+                categoryList = result.decodeList<Category>()
+            } catch (e: Exception) {
+                categoryList = emptyList()
+            }
+        }
+    }
+
     private fun updateOverview() {
         val items = adapter.getItems()
         val totalProducts = items.size
@@ -153,19 +175,37 @@ class StorageFragment : Fragment() {
         val etQuantity = dialogView.findViewById<TextInputEditText>(R.id.et_quantity)
         val etUnit = dialogView.findViewById<TextInputEditText>(R.id.et_unit)
         val etNote = dialogView.findViewById<TextInputEditText>(R.id.et_note)
+        val spCategory = dialogView.findViewById<Spinner>(R.id.sp_category)
+        val etPrice = dialogView.findViewById<TextInputEditText>(R.id.et_price_ingredient)
+
+        val categoryNames = categoryList.map { it.category_name ?: "" }
+        val adapterSpinner = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categoryNames)
+        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spCategory.adapter = adapterSpinner
 
         // Nếu là sửa, điền thông tin cũ
         item?.let {
             etProductName.setText(it.name)
-            etQuantity.setText(it.quantity?.toInt()?.toString() ?: "")
+            etQuantity.setText(it.quantity?.toString() ?: "")
             etUnit.setText(it.unit)
+            etPrice.setText(it.price_ingredient?.toString() ?: "")
+            val selectedIndex = categoryList.indexOfFirst { cat -> cat.category_id == it.category_id }
+            if (selectedIndex >= 0) spCategory.setSelection(selectedIndex)
+            etNote.setText("") // Nếu DB có trường ghi chú thì lấy ra, còn không thì để trống
         }
 
         val dialog = AlertDialog.Builder(requireContext())
             .setTitle(if (item == null) "Thêm sản phẩm mới" else "Sửa sản phẩm")
             .setView(dialogView)
-            .setPositiveButton("Lưu", null) // Để custom validate
+            .setPositiveButton("Lưu", null)
             .setNegativeButton("Hủy", null)
+            .apply {
+                if (item != null) {
+                    setNeutralButton("Xóa") { _, _ ->
+                        showDeleteConfirmDialog(item)
+                    }
+                }
+            }
             .create()
 
         dialog.setOnShowListener {
@@ -174,17 +214,20 @@ class StorageFragment : Fragment() {
                 val productName = etProductName.text?.toString()?.trim() ?: ""
                 val quantity = etQuantity.text?.toString()?.toDoubleOrNull() ?: 0.0
                 val unit = etUnit.text?.toString()?.trim() ?: ""
-                // val note = etNote.text?.toString() // Nếu cần dùng ghi chú
+                val price = etPrice.text?.toString()?.toDoubleOrNull() ?: 0.0
+                val selectedCategoryIndex = spCategory.selectedItemPosition
+                val categoryId = if (selectedCategoryIndex >= 0 && selectedCategoryIndex < categoryList.size) categoryList[selectedCategoryIndex].category_id else null
+                // val note = etNote.text?.toString() // Nếu DB có trường ghi chú thì lấy ra
 
-                if (productName.isBlank() || quantity <= 0 || unit.isBlank()) {
+                if (productName.isBlank() || quantity <= 0 || unit.isBlank() || categoryId == null || price <= 0) {
                     Toast.makeText(context, "Vui lòng điền đầy đủ thông tin hợp lệ", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
 
                 if (item == null) {
-                    addIngredientToSupabase(productName, quantity, unit)
+                    addIngredientToSupabase(productName, quantity, unit, categoryId, price)
                 } else {
-                    updateIngredientToSupabase(item, productName, quantity, unit)
+                    updateIngredientToSupabase(item, productName, quantity, unit, categoryId, price)
                 }
                 dialog.dismiss()
             }
@@ -192,13 +235,44 @@ class StorageFragment : Fragment() {
         dialog.show()
     }
 
-    private fun addIngredientToSupabase(name: String, quantity: Double, unit: String) {
+    private fun showDeleteConfirmDialog(item: Ingredient) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Xóa sản phẩm")
+            .setMessage("Bạn có chắc chắn muốn xóa sản phẩm này không?")
+            .setPositiveButton("Xóa") { _, _ ->
+                deleteIngredientFromSupabase(item)
+            }
+            .setNegativeButton("Hủy", null)
+            .show()
+    }
+
+    private fun deleteIngredientFromSupabase(item: Ingredient) {
+        if (item.ingredient_id == null) {
+            Toast.makeText(context, "Không xác định được ID sản phẩm để xóa", Toast.LENGTH_SHORT).show()
+            return
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                val newIngredient = Ingredient().apply {
+                Database.client.postgrest["ingredients"].delete {
+                    filter { eq("ingredient_id", item.ingredient_id!!) }
+                }
+                fetchIngredientsFromSupabase()
+                Toast.makeText(context, "Đã xóa sản phẩm", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(context, "Lỗi khi xóa sản phẩm", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun addIngredientToSupabase(name: String, quantity: Double, unit: String, categoryId: Long?, price: Double) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val newIngredient = com.example.restaurantmanagementapp.model.Ingredient().apply {
                     this.name = name
                     this.quantity = quantity
                     this.unit = unit
+                    this.category_id = categoryId
+                    this.price_ingredient = price
                 }
                 Database.client.postgrest["ingredients"].insert(newIngredient)
                 fetchIngredientsFromSupabase()
@@ -209,33 +283,54 @@ class StorageFragment : Fragment() {
         }
     }
 
-    private fun updateIngredientToSupabase(item: Ingredient, name: String, quantity: Double, unit: String) {
+    // Sửa hàm updateIngredientToSupabase để nhận thêm updatedAt
+    private fun updateIngredientToSupabase(item: com.example.restaurantmanagementapp.model.Ingredient, name: String, quantity: Double, unit: String, categoryId: Long?, price: Double, updatedAt: String? = null) {
+        if (item.ingredient_id == null) {
+            Toast.makeText(context, "Không xác định được ID sản phẩm để cập nhật", Toast.LENGTH_SHORT).show()
+            return
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                val updateMap = mapOf(
+                val updateMap = mutableMapOf<String, Any>(
                     "name" to name,
                     "quantity" to quantity,
-                    "unit" to unit
+                    "unit" to unit,
+                    "category_id" to (categoryId ?: 0L),
+                    "price_ingredient" to price
                 )
+                if (!updatedAt.isNullOrBlank()) {
+                    updateMap["updated_at"] = updatedAt
+                }
                 Database.client.postgrest["ingredients"]
                     .update(updateMap) {
-                        filter { item.ingredient_id?.let { eq("ingredient_id", it) } }
+                        filter { eq("ingredient_id", item.ingredient_id!!) }
                     }
                 fetchIngredientsFromSupabase()
                 Toast.makeText(context, "Đã cập nhật sản phẩm", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
-                Toast.makeText(context, "Lỗi khi cập nhật sản phẩm", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Lỗi khi cập nhật sản phẩm: ${e.message}", Toast.LENGTH_LONG).show()
+                Log.e("StorageFragment", "updateIngredientToSupabase error", e)
             }
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateItemQuantity(item: Ingredient, additionalQuantity: Double) {
         if (additionalQuantity <= 0) {
             Toast.makeText(context, "Số lượng nhập phải lớn hơn 0", Toast.LENGTH_SHORT).show()
             return
         }
         val newQuantity = (item.quantity ?: 0.0) + additionalQuantity
-        updateIngredientToSupabase(item, item.name ?: "", newQuantity, item.unit ?: "")
+        val now = OffsetDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+        updateIngredientToSupabase(
+            item,
+            item.name ?: "",
+            newQuantity,
+            item.unit ?: "",
+            item.category_id,
+            item.price_ingredient ?: 0.0,
+            now // truyền updated_at
+        )
     }
 
     private fun showEditDialog(item: Ingredient) {
@@ -344,7 +439,7 @@ class StorageAdapter(
 
         val status = if ((item.quantity ?: 0.0) <= 10) "Sắp hết" else "Đủ"
         holder.viewStatus.setBackgroundResource(
-            if (status == "Sắp hết") R.drawable.status_background_red else R.drawable.status_background_green
+            if (status == "Sắp hết") R.drawable.dot_red else R.drawable.dot_green
         )
 
         // Xử lý nhập thêm hàng
@@ -367,8 +462,11 @@ class StorageAdapter(
 
         val etAddQuantity = dialogView.findViewById<TextInputEditText>(R.id.et_add_quantity)
         etAddQuantity.inputType = android.text.InputType.TYPE_CLASS_NUMBER or android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
+        etAddQuantity.requestFocus()
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        imm?.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
 
-        AlertDialog.Builder(context)
+        val dialog = AlertDialog.Builder(context)
             .setTitle("Nhập thêm hàng")
             .setView(dialogView)
             .setPositiveButton("Xác nhận") { _, _ ->
@@ -384,7 +482,17 @@ class StorageAdapter(
                 }
             }
             .setNegativeButton("Hủy", null)
-            .show()
+            .create()
+
+        dialog.setOnDismissListener {
+            // Ẩn bàn phím và clear focus triệt để khi đóng dialog nhập số lượng
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            val parentActivity = context as? AppCompatActivity
+            val etSearch = parentActivity?.findViewById<TextInputEditText>(R.id.et_search)
+            etSearch?.clearFocus()
+            imm?.hideSoftInputFromWindow(etSearch?.windowToken, 0)
+        }
+        dialog.show()
     }
 
     override fun getItemCount() = items.size
