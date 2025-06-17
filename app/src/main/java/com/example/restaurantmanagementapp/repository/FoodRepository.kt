@@ -2,6 +2,7 @@ package com.example.restaurantmanagementapp.repository
 
 import android.util.Log
 import com.example.restaurantmanagementapp.config.Database
+import com.example.restaurantmanagementapp.model.CartItem
 import com.example.restaurantmanagementapp.model.Food
 import com.example.restaurantmanagementapp.model.User
 import io.github.jan.supabase.postgrest.from
