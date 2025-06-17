@@ -83,9 +83,9 @@ class CartFragment : Fragment() {
 //            val intent = Intent(requireContext(), Bill::class.java)
 //            intent.putExtra("tableId", tableNumber) // truyền tableNumber sang Bill với key là "tableId"
 //            startActivity(intent)
-            
+
             ////////////////////////////////////////////////////////////////////////////////////////////////
-            
+
             CoroutineScope(Dispatchers.Main).launch {
                 // Cập nhật quantity và paid=true cho tất cả cart item
                 var allSuccess = true
@@ -136,4 +136,3 @@ class CartFragment : Fragment() {
             ?.text = "% ,.0f $".format(total)
     }
 }
-
