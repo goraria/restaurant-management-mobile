@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.restaurantmanagementapp.model.CartItem
 import com.example.restaurantmanagementapp.model.Food
+import com.example.restaurantmanagementapp.model.Bill
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

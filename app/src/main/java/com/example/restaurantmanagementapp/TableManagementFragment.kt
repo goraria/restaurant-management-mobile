@@ -24,6 +24,7 @@ import android.widget.EditText
 import android.widget.CheckBox
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageButton
+import com.example.restaurantmanagementapp.repository.TableRepository
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -71,22 +72,22 @@ class TableManagementFragment : Fragment() {
     }
 
     private fun showTableDialog(table: RestaurantTable?) {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_table, null)
-        val edtName = dialogView.findViewById<EditText>(R.id.edt_table_name)
-        val edtChair = dialogView.findViewById<EditText>(R.id.edt_table_chair)
-        val cbStatus = dialogView.findViewById<CheckBox>(R.id.cb_table_status)
+        var dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_table, null)
+        var edtName = dialogView.findViewById<EditText>(R.id.edt_table_name)
+        var edtChair = dialogView.findViewById<EditText>(R.id.edt_table_chair)
+        var cbStatus = dialogView.findViewById<CheckBox>(R.id.cb_table_status)
         if (table != null) {
             edtName.setText(table.name)
             edtChair.setText(table.chair_number?.toString() ?: "")
             cbStatus.isChecked = table.status == true
         }
-        val dialog = AlertDialog.Builder(requireContext())
+        var dialog = AlertDialog.Builder(requireContext())
             .setTitle(if (table == null) "Thêm bàn mới" else "Chỉnh sửa bàn")
             .setView(dialogView)
             .setPositiveButton("Lưu") { _, _ ->
-                val name = edtName.text.toString().trim()
-                val chair = edtChair.text.toString().toIntOrNull() ?: 0
-                val status = cbStatus.isChecked
+                var name = edtName.text.toString().trim()
+                var chair = edtChair.text.toString().toIntOrNull() ?: 0
+                var status = cbStatus.isChecked
                 if (name.isNotEmpty() && chair > 0) {
                     if (table == null) {
                         addTable(name, chair, status)
@@ -104,18 +105,22 @@ class TableManagementFragment : Fragment() {
 
     private fun addTable(name: String, chair: Int, status: Boolean) {
         CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val newTable = mapOf(
-                    "name" to name,
-                    "chair_number" to chair,
-                    "status" to status
-                )
-                Database.client.postgrest["restaurant_table"].insert(newTable)
+            var success = TableRepository.addTable(
+                RestaurantTable(
+                    table_id = 0L
+                ).apply {
+                    this.name = name
+                    this.chair_number = chair
+                    this.status = status
+                }
+            )
+            if (success) {
                 fetchTables()
                 Toast.makeText(requireContext(), "Đã thêm bàn mới", Toast.LENGTH_SHORT).show()
-            } catch (e: Exception) {
-                Toast.makeText(requireContext(), "Lỗi thêm bàn: ${e.message}", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "Lỗi thêm bàn", Toast.LENGTH_SHORT).show()
             }
+
         }
     }
 
@@ -142,8 +147,8 @@ class TableManagementFragment : Fragment() {
     private fun fetchTables() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val result = Database.client.postgrest["restaurant_table"].select()
-                val tables = result.decodeList<RestaurantTable>()
+                var result = Database.client.postgrest["restaurant_table"].select()
+                var tables = result.decodeList<RestaurantTable>()
                 Log.d("TableDebug", "Fetched tables: ${tables.size}")
                 Toast.makeText(requireContext(), "Số bàn lấy được: ${tables.size}", Toast.LENGTH_SHORT).show()
                 adapter.updateItems(tables)
