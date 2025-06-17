@@ -1,13 +1,29 @@
 package com.example.restaurantmanagementapp.repository
-
 import com.example.restaurantmanagementapp.config.Database
-import com.example.restaurantmanagementapp.model.Table
+import com.example.restaurantmanagementapp.model.RestaurantTable
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 object TableRepository {
 
+    suspend fun addTable(table: RestaurantTable): Boolean = withContext(Dispatchers.IO) {
+        try {
+            Database.client.from("tables").insert(table)
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    suspend fun deleteTable(id: Long): Boolean = withContext(Dispatchers.IO) {
+        try {
+            Database.client.from("tables").delete {
+                filter { eq("table_id", id) }
+            }
+            true
+        } catch (e: Exception) {
 
     suspend fun getTables(): List<Table> = withContext(Dispatchers.IO) {
         try {
@@ -25,8 +41,6 @@ object TableRepository {
         raw
 
     }
-
-
     suspend fun updateTable(table: Table): Boolean = withContext(Dispatchers.IO) {
         try {
             Database.client
@@ -43,5 +57,22 @@ object TableRepository {
         }
     }
 
+
+    suspend fun updateTableStatus(tableId: Long, status: Boolean): Boolean = withContext(Dispatchers.IO) {
+        try {
+            Database.client
+                .from("restaurant_table")
+                .update(mapOf("status" to status)) {
+                    filter { eq("table_id", tableId) }
+                }
+            println("Updated table $tableId with status $status")
+            true
+        } catch (e: Exception) {
+            println("Error updating table $tableId: ${e.message}")
+            e.printStackTrace()
+            false
+        }
+
+    }
 
 }
