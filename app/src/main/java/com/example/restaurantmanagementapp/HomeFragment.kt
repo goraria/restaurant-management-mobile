@@ -27,7 +27,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var table_id = TableSession.currentTableId
         tableButtons = arrayOf(
             view.findViewById(R.id.btnTable1),
             view.findViewById(R.id.btnTable2),
@@ -75,6 +74,7 @@ class HomeFragment : Fragment() {
             button.text = tableNumber.toString()
             button.setOnClickListener {
                 TableSession.currentTableId = tableNumber.toLong()
+                Log.d("table", "Selected table: ${TableSession.currentTableId}")
                 // Lấy table theo table_id thay vì index
                 val table = tables.find { it.table_id == tableNumber.toLong() }
                 val frag = if (table?.status == true) {
