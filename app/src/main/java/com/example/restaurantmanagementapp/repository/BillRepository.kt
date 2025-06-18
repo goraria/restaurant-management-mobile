@@ -6,20 +6,18 @@ import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-
 object BillRepository {
 
     // Lấy các món trong cart theo id bàn
     suspend fun getCartByTableId(tableId: Int): List<CartItem> = withContext(Dispatchers.IO) {
         try {
-            val raw = Database.client.from("cart_items").select {
+            Database.client.from("cart_items").select {
                 filter { eq("table_id", tableId) }
-            }.decodeList<CartItem>()
-
-            raw.forEach {
-                println("productId=${it.productId} | productName=${it.productName} | qty=${it.quantity}")
+            }.decodeList<CartItem>().also { cartItems ->
+                cartItems.forEach {
+                    println("cart_item_id=${it.cart_item_id} | menu_id=${it.menu_id} | quantity=${it.quantity}")
+                }
             }
-            raw
         } catch (e: Exception) {
             println("Error fetching cart: ${e.message}")
             e.printStackTrace()
