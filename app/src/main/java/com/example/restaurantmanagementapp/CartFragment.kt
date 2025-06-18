@@ -66,6 +66,16 @@ class CartFragment : Fragment() {
             rvCartItems.layoutManager = LinearLayoutManager(requireContext())
             rvCartItems.adapter = cartAdapter
             updateTotalCost()
+            if (cartItems.isNotEmpty() && !hasNotifiedHome) {
+                hasNotifiedHome = true
+                parentFragmentManager.setFragmentResult(
+                    "tableStatusChanged",
+                    bundleOf(
+                        "tableNumber" to tableNumber,
+                        "isOccupied" to true
+                    )
+                )
+            }
         }
 
         btnAdd.setOnClickListener {

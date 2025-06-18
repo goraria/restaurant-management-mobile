@@ -51,7 +51,7 @@ object UserRepository {
 
             Database.client.from("users")
                 .update(updatedUser) {
-                    filter { eq("user_id", user.user_id) }
+                    filter { eq("user_id", user.user_id!!) }
                 }
             true
         } catch (e: Exception) {
@@ -59,7 +59,19 @@ object UserRepository {
             false
         }
     }
-
+    suspend fun getUserIDByName(username: String): Long? = withContext(Dispatchers.IO) {
+        try {
+            val result = Database.client.from("users")
+                .select {
+                    filter { eq("username", username) }
+                }
+                .decodeSingle<User>()
+            result.user_id
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
     suspend fun deleteUser(user_id: Int): Boolean = withContext(Dispatchers.IO) {
         try {
             Database.client.from("users")

@@ -2,10 +2,10 @@ import com.example.restaurantmanagementapp.config.Database
 import com.example.restaurantmanagementapp.model.CartItem
 import com.example.restaurantmanagementapp.model.Food
 import com.example.restaurantmanagementapp.repository.FoodRepository
+import com.example.restaurantmanagementapp.repository.TableRepository
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import com.example.restaurantmanagementapp.repository.TableRepository
 
 object CartItemRepository {
 
@@ -22,6 +22,15 @@ object CartItemRepository {
             e.printStackTrace()
             false
         }
+    }
+
+    suspend fun getCartItemById(cartItemId: Long): CartItem? = withContext(Dispatchers.IO) {
+        val result = Database.client.from("cart_items")
+            .select {
+                filter { eq("cart_item_id", cartItemId) }
+            }
+            .decodeList<CartItem>()
+        result.firstOrNull()
     }
 
     suspend fun getCartItemByTableAndPaid(tableId: Long, paid: Boolean): List<CartItem> = withContext(Dispatchers.IO) {
@@ -94,6 +103,7 @@ object CartItemRepository {
             false
         }
     }
+
     suspend fun updateTableStatusByCart(tableId: Long) {
         val cartCount = getCartItemByTableAndPaid(tableId.toLong(), false).size
         val status = cartCount > 0
