@@ -70,21 +70,7 @@
         app:layout_constraintBottom_toTopOf="@id/btncheckout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp">
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="60dp"
-            android:text="Tiền mặt"
-            android:textSize="20sp" />
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chuyển khoản"
-            android:textSize="20sp" />
-    </RadioGroup>
+        android:layout_marginTop="8dp"/>
 
     <Button
         android:id="@+id/btncheckout"

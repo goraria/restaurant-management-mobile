@@ -40,11 +40,8 @@ class HomeFragment : Fragment() {
             view.findViewById(R.id.btnTable11),
             view.findViewById(R.id.btnTable12)
         )
-
-        // 2) Setup click listener cho từng nút
         setupTableButtons()
 
-        // 3) Disable hết các nút, để tránh click khi chưa có data
         tableButtons.forEach { btn ->
             btn.isEnabled = false
             btn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.azure) // màu nhạt chờ load
@@ -66,7 +63,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        // 5) Nghe cập nhật từ Menu/Cart, chỉ update đúng 1 bàn
+
         parentFragmentManager.setFragmentResultListener(
             "tableStatusChanged", viewLifecycleOwner
         ) { _, bundle ->
@@ -100,7 +97,7 @@ class HomeFragment : Fragment() {
             val tableNumber = i + 1
             button.text = tableNumber.toString()
             button.setOnClickListener {
-                val table = tables.getOrNull(i)
+                val table = tables.find { it.table_id == tableNumber.toLong() }
                 val frag = if (table?.status == true) {
                     CartFragment().apply { arguments = bundleOf("tableNumber" to tableNumber) }
                 } else {
@@ -127,13 +124,15 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateAllButtons() {
-        tableButtons.forEachIndexed { i, button ->
-            val table = tables.getOrNull(i)
-            val isOcc = table?.status ?: false
-            button.backgroundTintList = ContextCompat.getColorStateList(
-                requireContext(),
-                if (isOcc) R.color.Aero else R.color.azure
-            )
+        tables.forEach { table ->
+            val index = ((table.table_id ?: 1L) - 1).toInt()
+            val button = tableButtons.getOrNull(index)
+            if (button != null) {
+                button.backgroundTintList = ContextCompat.getColorStateList(
+                    requireContext(),
+                    if (table.status == true) R.color.Aero else R.color.azure
+                )
+            }
         }
     }
 }

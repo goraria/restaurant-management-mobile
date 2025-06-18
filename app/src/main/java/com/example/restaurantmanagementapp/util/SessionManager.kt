@@ -10,7 +10,7 @@ class SessionManager(context: Context) {
 
     fun saveUser(user: User) {
         with(prefs.edit()) {
-            putLong("user_id", user.user_id)
+            putLong("user_id", user.user_id!!)
             putString("email", user.email)
             putString("first_name", user.first_name)
             putString("last_name", user.last_name)

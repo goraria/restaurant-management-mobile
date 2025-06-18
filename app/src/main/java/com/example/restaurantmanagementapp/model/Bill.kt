@@ -15,5 +15,6 @@ data class Bill(
     val payment_status: String,
     val notes: String? = null,
     @Contextual val created_at: OffsetDateTime,
-    @Contextual val updated_at: OffsetDateTime
+    @Contextual val updated_at: OffsetDateTime,
+    val table_id: Int,
 )
