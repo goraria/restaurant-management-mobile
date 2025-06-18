@@ -10,10 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.restaurantmanagementapp.model.Menu
 import com.example.restaurantmanagementapp.R
 import android.widget.TextView
+import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.example.restaurantmanagementapp.config.Database
+import com.example.restaurantmanagementapp.repository.MenuRepository
 import io.github.jan.supabase.postgrest.postgrest
 
 // TODO: Rename parameter arguments, choose names that match
@@ -21,11 +23,6 @@ import io.github.jan.supabase.postgrest.postgrest
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [RecipeManagementFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class RecipeManagementFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MenuAdapter
@@ -41,6 +38,24 @@ class RecipeManagementFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+    }
+    private fun showAddMenuDialog() {
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_menu, null)
+        val editName = dialogView.findViewById<android.widget.EditText>(R.id.edit_menu_name)
+        val editPrice = dialogView.findViewById<android.widget.EditText>(R.id.edit_menu_price)
+
+        val dialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Thêm món mới")
+            .setView(dialogView)
+            .setPositiveButton("Thêm") { _, _ ->
+                val name = editName.text.toString()
+                val price = editPrice.text.toString().toDoubleOrNull() ?: 0.0
+                addMenuToDatabase(name, price)
+            }
+            .setNegativeButton("Hủy", null)
+            .create()
+
+        dialog.show()
     }
 
     override fun onCreateView(
@@ -59,6 +74,11 @@ class RecipeManagementFragment : Fragment() {
         // Đổi tiêu đề sang Quản lý thực đơn
         val tvTotalMenu = view.findViewById<TextView?>(R.id.tv_total_menu)
         val tvTotalRecipe = view.findViewById<TextView?>(R.id.tv_total_recipe)
+        val fabAddMenu = view.findViewById<View>(R.id.fab_add_menu)
+        fabAddMenu.setOnClickListener {
+            showAddMenuDialog()
+        }
+
         tvTotalMenu?.text = "Tổng số món: ${menuList.size}"
         tvTotalRecipe?.text = "Tổng số công thức: Xem chi tiết"
         return view
@@ -67,12 +87,37 @@ class RecipeManagementFragment : Fragment() {
     private fun fetchMenus() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val menuResult = Database.client.postgrest["menu"].select()
-                val menus = menuResult.decodeList<Menu>()
-                menuList = menus
+                menuList = MenuRepository.getMenuItems()
                 adapter.updateMenus(menuList)
+
+                // Cập nhật TextView
+                view?.findViewById<TextView>(R.id.tv_total_menu)?.text = "Tổng số món: ${menuList.size}"
+                view?.findViewById<TextView>(R.id.tv_total_recipe)?.text = "Tổng số công thức: Xem chi tiết"
             } catch (e: Exception) {
-                // handle error
+                e.printStackTrace()
+                // Có thể hiện lỗi ra giao diện nếu muốn
+            }
+        }
+    }
+
+    private fun addMenuToDatabase(name: String, price: Double) {
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val newItem = Menu(
+                    menu_id = null, // để Supabase tự sinh ID
+                    name = name,
+                    price = price
+                )
+                val success = MenuRepository.addMenuItem(newItem)
+                if (success) {
+                    Toast.makeText(requireContext(), "Thêm món thành công!", Toast.LENGTH_SHORT).show()
+                    fetchMenus()
+                } else {
+                    Toast.makeText(requireContext(), "Thêm món thất bại!", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(requireContext(), "Có lỗi xảy ra khi thêm món!", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -102,25 +147,5 @@ class RecipeManagementFragment : Fragment() {
                 itemView.setOnClickListener { onClick(menu) }
             }
         }
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment RecipeManagementFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            RecipeManagementFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

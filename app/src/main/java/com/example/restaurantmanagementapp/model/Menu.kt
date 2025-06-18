@@ -31,7 +31,7 @@ import java.time.OffsetDateTime
 
 @Serializable
 data class Menu(
-    val menu_id: Long,
+    val menu_id: Long? = null,
     val name: String? = null,
     val price: Double? = null,
     val stock: Boolean? = null,
