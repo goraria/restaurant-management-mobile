@@ -59,4 +59,19 @@ object TableRepository {
             false
         }
     }
+    suspend fun updateTableStatus(tableId: Long, status: Boolean): Boolean = withContext(Dispatchers.IO) {
+        try {
+            Database.client
+                .from("restaurant_table")
+                .update(mapOf("status" to status)) {
+                    filter { eq("table_id", tableId) }
+                }
+            println("Updated table $tableId with status $status")
+            true
+        } catch (e: Exception) {
+            println("Error updating table $tableId: ${e.message}")
+            e.printStackTrace()
+            false
+        }
+    }
 }

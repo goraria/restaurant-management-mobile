@@ -127,6 +127,8 @@ dependencies {
 
     // **BẮT BUỘC** phải có để dùng androidx.gridlayout.widget.GridLayout
     implementation("androidx.gridlayout:gridlayout:1.0.0")
+    implementation("at.favre.lib:bcrypt:0.9.0")
+
 
 }
 

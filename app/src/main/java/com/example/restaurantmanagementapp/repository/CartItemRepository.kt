@@ -5,6 +5,7 @@ import com.example.restaurantmanagementapp.repository.FoodRepository
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import com.example.restaurantmanagementapp.repository.TableRepository
 
 object CartItemRepository {
 
@@ -92,5 +93,10 @@ object CartItemRepository {
             e.printStackTrace()
             false
         }
+    }
+    suspend fun updateTableStatusByCart(tableId: Long) {
+        val cartCount = getCartItemByTableAndPaid(tableId.toLong(), false).size
+        val status = cartCount > 0
+        TableRepository.updateTableStatus(tableId, status)
     }
 }
