@@ -49,20 +49,6 @@
     app:layout_constraintStart_toEndOf="@id/tvQuantity"
     app:layout_constraintTop_toBottomOf="@id/tvName" />
 
-    <TextView
-    android:id="@+id/tvDescription"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:text="Có 6 cái cánh gà giòn ngon hấp dẫn, thích hợp ăn chơi hoặc ăn chính."
-    android:textSize="14sp"
-    android:textColor="@android:color/darker_gray"
-    android:maxLines="3"
-    android:ellipsize="end"
-    android:layout_marginTop="4dp"
-    app:layout_constraintStart_toStartOf="@id/tvName"
-    app:layout_constraintEnd_toEndOf="@id/tvName"
-    app:layout_constraintTop_toBottomOf="@id/itemQuantity"
-    app:layout_constraintBottom_toBottomOf="parent" /> <!-- neo đáy -->
 
     <TextView
     android:id="@+id/tvprice"

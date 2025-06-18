@@ -1,10 +1,16 @@
 package com.example.restaurantmanagementapp.model
 
-// OrderItem có thể giống CartItem hoặc có thêm các thuộc tính khác nếu cần
-data class OrderItem(
-    val productId: String,
+import kotlinx.serialization.Serializable
+
+@Serializable
+class OrderItem(
+    val productId: String? = null,
     val productName: String,
     val productPrice: Double,
     val quantity: Int,
     val imageUrl: String? = null
-) 
+) {
+    override fun toString(): String {
+        return "OrderItem(productId='$productId', productName='$productName', productPrice=$productPrice, quantity=$quantity, imageUrl=$imageUrl)"
+    }
+}

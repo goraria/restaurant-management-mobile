@@ -24,6 +24,15 @@ object CartItemRepository {
         }
     }
 
+    suspend fun getCartItemById(cartItemId: Long): CartItem? = withContext(Dispatchers.IO) {
+        val result = Database.client.from("cart_items")
+            .select {
+                filter { eq("cart_item_id", cartItemId) }
+            }
+            .decodeList<CartItem>()
+        result.firstOrNull()
+    }
+
     suspend fun getCartItemByTableAndPaid(tableId: Long, paid: Boolean): List<CartItem> = withContext(Dispatchers.IO) {
         val result = Database.client
             .from("cart_items")
