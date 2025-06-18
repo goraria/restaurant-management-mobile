@@ -11,6 +11,7 @@ import com.example.restaurantmanagementapp.R
 import com.example.restaurantmanagementapp.databinding.ActivityLoginBinding
 import com.example.restaurantmanagementapp.layout.ManagerActivity
 import com.example.restaurantmanagementapp.repository.UserRepository
+import com.example.restaurantmanagementapp.util.SessionManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,11 +39,19 @@ class LoginActivity : AppCompatActivity() {
 
             if (validateInput(email, password)) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    val success = UserRepository.loginUser(email, password)
-                    if (success) {
+
+                    val user = UserRepository.loginUser(email, password)
+                    if (user != null) {
+                        val sessionManager = SessionManager(this@LoginActivity)
+                        sessionManager.saveUser(user)
                         Toast.makeText(this@LoginActivity, "Đăng nhập thành công", Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this@LoginActivity, ManagerActivity::class.java))
-                        finish()
+                        if (user.role.toInt() == 1) {
+                            // Quản lý
+                            startActivity(Intent(this@LoginActivity, ManagerActivity::class.java))
+                        } else {
+                            // Nhân viên
+                            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        }
                     } else {
                         Toast.makeText(this@LoginActivity, "Sai email hoặc mật khẩu", Toast.LENGTH_SHORT).show()
                     }

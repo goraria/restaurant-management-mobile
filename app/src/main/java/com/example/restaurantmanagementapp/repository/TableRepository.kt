@@ -5,6 +5,10 @@ import com.example.restaurantmanagementapp.model.RestaurantTable
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
+import kotlinx.serialization.json.JsonPrimitive
 
 object TableRepository {
 
@@ -17,6 +21,7 @@ object TableRepository {
             false
         }
     }
+
 
     suspend fun deleteTable(id: Long): Boolean = withContext(Dispatchers.IO) {
         try {
@@ -46,12 +51,19 @@ object TableRepository {
 
     suspend fun updateTable(table: RestaurantTable): Boolean = withContext(Dispatchers.IO) {
         try {
-            Database.client
+            val updateJson = buildJsonObject {
+                put("name", table.name)
+                put("chair_number", table.chair_number)
+                put("status", table.status)
+            }
+
+            val response = Database.client
                 .from("restaurant_table")
-                .update(mapOf("status" to table.status)) {
-                    filter { eq("table_id", table.table_id) }
+                .update(updateJson) {
+                    filter { eq("table_id", table.table_id!!) }
                 }
-            println("Updated table ${table.table_id} with status ${table.status}")
+
+            println("Updated table ${table.table_id}: $response")
             true
         } catch (e: Exception) {
             println("Error updating table ${table.table_id}: ${e.message}")
@@ -59,6 +71,9 @@ object TableRepository {
             false
         }
     }
+
+
+
     suspend fun updateTableStatus(tableId: Long, status: Boolean): Boolean = withContext(Dispatchers.IO) {
         try {
             Database.client

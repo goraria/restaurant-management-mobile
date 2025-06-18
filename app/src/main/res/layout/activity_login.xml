@@ -40,7 +40,8 @@
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:text="pa106@gmail.com"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

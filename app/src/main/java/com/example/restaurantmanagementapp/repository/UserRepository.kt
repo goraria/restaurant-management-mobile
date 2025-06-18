@@ -5,13 +5,27 @@ import com.example.restaurantmanagementapp.model.User
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import at.favre.lib.crypto.bcrypt.BCrypt  // dùng thư viện bcrypt cho Android
+import at.favre.lib.crypto.bcrypt.BCrypt
 
 object UserRepository {
 
     suspend fun getUsers(): List<User> = withContext(Dispatchers.IO) {
         val result = Database.client.from("users").select()
         result.decodeList<User>()
+    }
+
+    suspend fun getUserById(user_id: Int): User? = withContext(Dispatchers.IO) {
+        try {
+            val result = Database.client.from("users")
+                .select {
+                    filter { eq("user_id", user_id) }
+                }
+                .decodeSingle<User>()
+            result
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 
     suspend fun addUser(user: User): Boolean = withContext(Dispatchers.IO) {
@@ -26,10 +40,17 @@ object UserRepository {
         }
     }
 
-    suspend fun updateUser(user: User): Boolean = withContext(Dispatchers.IO) {
+    suspend fun updateUser(user: User, newPassword: String? = null): Boolean = withContext(Dispatchers.IO) {
         try {
+            val updatedUser = if (!newPassword.isNullOrEmpty()) {
+                val hashedPassword = BCrypt.withDefaults().hashToString(12, newPassword.toCharArray())
+                user.copy(password = hashedPassword)
+            } else {
+                user
+            }
+
             Database.client.from("users")
-                .update(user) {
+                .update(updatedUser) {
                     filter { eq("user_id", user.user_id) }
                 }
             true
@@ -52,7 +73,7 @@ object UserRepository {
         }
     }
 
-    suspend fun loginUser(email: String, password: String): Boolean = withContext(Dispatchers.IO) {
+    suspend fun loginUser(email: String, password: String): User? = withContext(Dispatchers.IO) {
         try {
             val result = Database.client.from("users")
                 .select {
@@ -61,22 +82,14 @@ object UserRepository {
                 .decodeSingle<User>()
 
             val verifyResult = BCrypt.verifyer().verify(password.toCharArray(), result.password)
-            return@withContext verifyResult.verified
+            if (verifyResult.verified) {
+                result
+            } else {
+                null
+            }
         } catch (e: Exception) {
             e.printStackTrace()
-            false
-        }
-    }
-
-    suspend fun registerUser(user: User): Boolean = withContext(Dispatchers.IO) {
-        try {
-            val hashedPassword = BCrypt.withDefaults().hashToString(12, user.password.toCharArray())
-            val newUser = user.copy(password = hashedPassword)
-            Database.client.from("users").insert(newUser)
-            true
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
+            null
         }
     }
 
