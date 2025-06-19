@@ -17,9 +17,21 @@ import java.time.OffsetDateTime
 //     val image_url: String
 // )
 
+//@Serializable
+//class Menu {
+//    var menu_id: Long
+//    var name: String? = null
+//    var price: Double? = null
+//    var stock: Boolean? = null
+//    var created_at: String? = null
+//    var updated_at: String? = null
+//    var description: String? = null
+//    var image_url: String? = null
+//}
+
 @Serializable
 data class Menu(
-    val menu_id: Long,
+    val menu_id: Long? = null,
     val name: String? = null,
     val price: Double? = null,
     val stock: Boolean? = null,

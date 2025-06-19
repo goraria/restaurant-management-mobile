@@ -42,12 +42,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "1.8"
     }
     buildFeatures {
         compose = true
@@ -129,5 +129,8 @@ dependencies {
     implementation("androidx.gridlayout:gridlayout:1.0.0")
     implementation("at.favre.lib:bcrypt:0.9.0")
 
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation ("androidx.activity:activity-ktx:1.8.2")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 }
 

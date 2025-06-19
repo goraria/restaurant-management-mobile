@@ -68,6 +68,16 @@ class CartFragment : Fragment() {
             rvCartItems.layoutManager = LinearLayoutManager(requireContext())
             rvCartItems.adapter = cartAdapter
             updateTotalCost()
+            if (cartItems.isNotEmpty() && !hasNotifiedHome) {
+                hasNotifiedHome = true
+                parentFragmentManager.setFragmentResult(
+                    "tableStatusChanged",
+                    bundleOf(
+                        "tableNumber" to tableNumber,
+                        "isOccupied" to true
+                    )
+                )
+            }
         }
 
         btnAdd.setOnClickListener {
@@ -79,6 +89,16 @@ class CartFragment : Fragment() {
 
         // Nút Thanh toán
         btnPay.setOnClickListener {
+//            if (tableNumber == 0) {
+//                Toast.makeText(requireContext(), "Không xác định được bàn!", Toast.LENGTH_SHORT).show()
+//                return@setOnClickListener
+//            }
+//            val intent = Intent(requireContext(), Bill::class.java)
+//            intent.putExtra("tableId", tableNumber) // truyền tableNumber sang Bill với key là "tableId"
+//            startActivity(intent)
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////
+
             CoroutineScope(Dispatchers.Main).launch {
                 // Chỉ cập nhật quantity cho tất cả cart item
                 var allSuccess = true

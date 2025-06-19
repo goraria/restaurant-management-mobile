@@ -27,6 +27,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         tableButtons = arrayOf(
             view.findViewById(R.id.btnTable1),
             view.findViewById(R.id.btnTable2),
@@ -66,6 +67,32 @@ class HomeFragment : Fragment() {
                 e.printStackTrace()
             }
         }
+//        parentFragmentManager.setFragmentResultListener(
+//            "tableStatusChanged", viewLifecycleOwner
+//        ) { _, bundle ->
+//            val tableNumber = bundle.getInt("tableNumber")
+//            val isOccupied = bundle.getBoolean("isOccupied")
+//            println("Received tableStatusChanged: tableNumber=$tableNumber, isOccupied=$isOccupied")
+//
+//            lifecycleScope.launch {
+//                try {
+//                    val idx = tables.indexOfFirst { it.table_id == tableNumber.toLong() }
+//                    if (idx != -1) {
+//                        val updated = tables[idx].copy(status = isOccupied)
+//                        if (TableRepository.updateTable(updated)) {
+//                            // Chỉ cập nhật bàn vừa thay đổi, không reload toàn bộ
+//                            tables[idx] = updated
+//                            updateButton(tableNumber)
+//                        }
+//                    } else {
+//                        println("Table with table_id=$tableNumber not found")
+//                    }
+//                } catch (e: Exception) {
+//                    println("Error updating table $tableNumber: ${e.message}")
+//                    e.printStackTrace()
+//                }
+//            }
+//        }
     }
 
     private fun setupTableButtons() {
@@ -90,14 +117,26 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun updateButton(tableNumber: Int) {
+        val index = tableNumber - 1
+        val table = tables.getOrNull(index)
+        val button = tableButtons.getOrNull(index)
+        if (table != null && button != null) {
+            button.backgroundTintList = ContextCompat.getColorStateList(
+                requireContext(),
+                if (table.status ?: false) R.color.Aero else R.color.azure
+            )
+        }
+    }
+
     private fun updateAllButtons() {
         tables.forEach { table ->
-            val index = (table.table_id - 1).toInt()
+            val index = ((table.table_id ?: 1L) - 1).toInt()
             val button = tableButtons.getOrNull(index)
             if (button != null) {
                 button.backgroundTintList = ContextCompat.getColorStateList(
                     requireContext(),
-                    if (table.status) R.color.Aero else R.color.azure
+                    if (table.status == true) R.color.Aero else R.color.azure
                 )
             }
         }

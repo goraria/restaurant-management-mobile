@@ -13,17 +13,20 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Hàng 1: chấm trạng thái + tên bàn + nút Edit -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical">
+
             <View
                 android:id="@+id/view_table_status_dot"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:layout_marginEnd="8dp"
-                android:background="@drawable/dot_green"/>
+                android:background="@drawable/dot_green" />
+
             <TextView
                 android:id="@+id/tv_table_name"
                 android:layout_width="0dp"
@@ -32,7 +35,8 @@
                 android:text="Tên bàn"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                android:textColor="#222"/>
+                android:textColor="#222" />
+
             <ImageButton
                 android:id="@+id/btn_edit_table"
                 android:layout_width="32dp"
@@ -41,17 +45,36 @@
                 android:src="@drawable/outline_edit_24"
                 android:contentDescription="Chỉnh sửa"
                 android:scaleType="centerInside"
-                android:padding="4dp"/>
+                android:padding="4dp" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_table_chair"
-            android:layout_width="wrap_content"
+        <!-- Hàng 2: Số ghế + nút Delete -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Số ghế: 4"
-            android:textSize="15sp"
-            android:textColor="#444"
-            android:layout_marginTop="4dp"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:id="@+id/tv_table_chair"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Số ghế: 4"
+                android:textSize="15sp"
+                android:textColor="#444" />
+
+            <ImageButton
+                android:id="@+id/btn_delete_table"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/outline_delete_24"
+                android:contentDescription="Xóa bàn"
+                android:scaleType="centerInside"
+                android:padding="4dp" />
+        </LinearLayout>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

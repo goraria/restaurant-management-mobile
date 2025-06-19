@@ -5,7 +5,7 @@ import kotlinx.datetime.Instant
 
 @Serializable
 data class User(
-    val user_id: Long,
+    val user_id: Long? = null,
     val username: String,
     val email: String,
     val phone_number: String,

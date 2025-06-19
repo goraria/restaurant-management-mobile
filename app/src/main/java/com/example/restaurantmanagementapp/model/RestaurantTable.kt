@@ -4,9 +4,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RestaurantTable (
-    val table_id: Long,
-    val name: String? = null,
-    val chair_number: Int? = null,
-    val status: Boolean = false
+    var table_id: Long? = null,
+    var name: String? = null,
+    var chair_number: Int? = null,
+    var status: Boolean? = null
 )
 

@@ -15,7 +15,8 @@ object MenuRepository {
 
     suspend fun addMenuItem(item: Menu): Boolean = withContext(Dispatchers.IO) {
         try {
-            Database.client.from("menu").insert(item)
+            val newItem = item.copy(menu_id = null)
+            Database.client.from("menu").insert(newItem)
             true
         } catch (e: Exception) {
             e.printStackTrace()
@@ -26,7 +27,7 @@ object MenuRepository {
     suspend fun updateMenuItem(item: Menu): Boolean = withContext(Dispatchers.IO) {
         try {
             Database.client.from("menu").update(item) {
-                filter { eq("menu_id", item.menu_id) }
+                filter { eq("menu_id", item.menu_id!!) }
             }
             true
         } catch (e: Exception) {

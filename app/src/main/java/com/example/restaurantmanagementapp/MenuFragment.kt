@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
@@ -21,6 +22,8 @@ import kotlinx.coroutines.withContext
 
 class MenuFragment : Fragment() {
 
+    private var hasNotifiedHome = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,32 +35,43 @@ class MenuFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Lấy tableId toàn cục nếu cần
         val tableId = com.example.restaurantmanagementapp.util.TableSession.currentTableId
+        val tableNumber = tableId.toInt()
+
         val recyclerCategory = view.findViewById<RecyclerView>(R.id.recyclerCategory)
         val recyclerFood = view.findViewById<RecyclerView>(R.id.recyclerFood)
 
-        // Gắn LayoutManager
         recyclerCategory.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         recyclerFood.layoutManager = LinearLayoutManager(requireContext())
 
-        // Load danh sách món ăn từ Supabase và truyền vào getFoods
         loadFoodsFromSupabase { foods ->
             recyclerFood.adapter = FoodAdapter(foods) { food ->
+
+                // Gửi sự kiện cho HomeFragment đổi màu bàn (nếu chưa gửi)
+                if (!hasNotifiedHome) {
+                    hasNotifiedHome = true
+                    parentFragmentManager.setFragmentResult(
+                        "tableStatusChanged",
+                        bundleOf(
+                            "tableNumber" to tableNumber,
+                            "isOccupied" to true
+                        )
+                    )
+                }
+
+                // Mở màn hình FoodDetail
                 val intent = Intent(requireContext(), FoodDetail::class.java).apply {
                     putExtra("foodID", food.menu_id)
                     putExtra("foodName", food.name)
                     putExtra("foodDesc", food.description)
                     putExtra("foodPrice", food.price)
                     putExtra("foodImage", food.image_url)
-                    putExtra("tableID", tableId) // Truyền thêm table_id
+                    putExtra("tableID", tableId)
                 }
                 startActivity(intent)
-
             }
         }
     }
-
 
     private fun loadFoodsFromSupabase(onResult: (List<Food>) -> Unit) {
         viewLifecycleOwner.lifecycleScope.launch {

@@ -84,7 +84,6 @@ class RegisterActivity : AppCompatActivity() {
 
             // Tạo đối tượng User để đăng ký
             val user = User(
-                user_id = 0L,
                 username = email,
                 email = email,
                 phone_number = phone,
