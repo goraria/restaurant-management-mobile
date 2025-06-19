@@ -1,6 +1,7 @@
 package com.example.restaurantmanagementapp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.restaurantmanagementapp.model.RestaurantTable
 import com.example.restaurantmanagementapp.repository.TableRepository
+import com.example.restaurantmanagementapp.util.TableSession
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -40,8 +42,11 @@ class HomeFragment : Fragment() {
             view.findViewById(R.id.btnTable11),
             view.findViewById(R.id.btnTable12)
         )
+
+        // 2) Setup click listener cho từng nút
         setupTableButtons()
 
+        // 3) Disable hết các nút, để tránh click khi chưa có data
         tableButtons.forEach { btn ->
             btn.isEnabled = false
             btn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.azure) // màu nhạt chờ load
@@ -56,40 +61,38 @@ class HomeFragment : Fragment() {
                 tables.addAll(fetched)
                 // Enable lại các nút khi có data
                 tableButtons.forEach { it.isEnabled = true }
-                updateAllButtons() // Đổi màu theo status thật
+                updateAllButtons() // Đổi màu theo status thật khi vào lại HomeFragment
             } catch (e: Exception) {
                 println("Error fetching tables: ${e.message}")
                 e.printStackTrace()
             }
         }
-
-
-        parentFragmentManager.setFragmentResultListener(
-            "tableStatusChanged", viewLifecycleOwner
-        ) { _, bundle ->
-            val tableNumber = bundle.getInt("tableNumber")
-            val isOccupied = bundle.getBoolean("isOccupied")
-            println("Received tableStatusChanged: tableNumber=$tableNumber, isOccupied=$isOccupied")
-
-            lifecycleScope.launch {
-                try {
-                    val idx = tables.indexOfFirst { it.table_id == tableNumber.toLong() }
-                    if (idx != -1) {
-                        val updated = tables[idx].copy(status = isOccupied)
-                        if (TableRepository.updateTable(updated)) {
-                            // Chỉ cập nhật bàn vừa thay đổi, không reload toàn bộ
-                            tables[idx] = updated
-                            updateButton(tableNumber)
-                        }
-                    } else {
-                        println("Table with table_id=$tableNumber not found")
-                    }
-                } catch (e: Exception) {
-                    println("Error updating table $tableNumber: ${e.message}")
-                    e.printStackTrace()
-                }
-            }
-        }
+//        parentFragmentManager.setFragmentResultListener(
+//            "tableStatusChanged", viewLifecycleOwner
+//        ) { _, bundle ->
+//            val tableNumber = bundle.getInt("tableNumber")
+//            val isOccupied = bundle.getBoolean("isOccupied")
+//            println("Received tableStatusChanged: tableNumber=$tableNumber, isOccupied=$isOccupied")
+//
+//            lifecycleScope.launch {
+//                try {
+//                    val idx = tables.indexOfFirst { it.table_id == tableNumber.toLong() }
+//                    if (idx != -1) {
+//                        val updated = tables[idx].copy(status = isOccupied)
+//                        if (TableRepository.updateTable(updated)) {
+//                            // Chỉ cập nhật bàn vừa thay đổi, không reload toàn bộ
+//                            tables[idx] = updated
+//                            updateButton(tableNumber)
+//                        }
+//                    } else {
+//                        println("Table with table_id=$tableNumber not found")
+//                    }
+//                } catch (e: Exception) {
+//                    println("Error updating table $tableNumber: ${e.message}")
+//                    e.printStackTrace()
+//                }
+//            }
+//        }
     }
 
     private fun setupTableButtons() {
@@ -97,6 +100,9 @@ class HomeFragment : Fragment() {
             val tableNumber = i + 1
             button.text = tableNumber.toString()
             button.setOnClickListener {
+                TableSession.currentTableId = tableNumber.toLong()
+                Log.d("table", "Selected table: ${TableSession.currentTableId}")
+                // Lấy table theo table_id thay vì index
                 val table = tables.find { it.table_id == tableNumber.toLong() }
                 val frag = if (table?.status == true) {
                     CartFragment().apply { arguments = bundleOf("tableNumber" to tableNumber) }

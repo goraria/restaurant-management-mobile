@@ -8,68 +8,68 @@
     android:padding="16dp">
 
     <ImageView
-        android:id="@+id/imgFood"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:src="@mipmap/canhga"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:id="@+id/imgFood"
+    android:layout_width="60dp"
+    android:layout_height="60dp"
+    android:src="@mipmap/canhga"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Cánh gà"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintStart_toEndOf="@id/imgFood"
-        app:layout_constraintTop_toTopOf="@id/imgFood"
-        app:layout_constraintEnd_toStartOf="@id/tvPrice" />
+    android:id="@+id/tvName"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:text="Cánh gà"
+    android:textSize="18sp"
+    android:textStyle="bold"
+    android:textColor="@android:color/black"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="8dp"
+    app:layout_constraintStart_toEndOf="@id/imgFood"
+    app:layout_constraintTop_toTopOf="@id/imgFood"
+    app:layout_constraintEnd_toStartOf="@id/tvPrice" />
 
     <TextView
-        android:id="@+id/tvQuantity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Số lượng:"
-        android:textSize="14sp"
-        android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="@id/tvName"
-        app:layout_constraintTop_toBottomOf="@id/tvName" />
+    android:id="@+id/tvQuantity"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Số lượng:"
+    android:textSize="14sp"
+    android:textColor="@android:color/black"
+    app:layout_constraintStart_toStartOf="@id/tvName"
+    app:layout_constraintTop_toBottomOf="@id/tvName" />
 
     <TextView
-        android:id="@+id/itemQuantity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1"
-        android:textSize="14sp"
-        android:textColor="@android:color/black"
-        app:layout_constraintStart_toEndOf="@id/tvQuantity"
-        app:layout_constraintTop_toBottomOf="@id/tvName" />
+    android:id="@+id/itemQuantity"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="1"
+    android:textSize="14sp"
+    android:textColor="@android:color/black"
+    app:layout_constraintStart_toEndOf="@id/tvQuantity"
+    app:layout_constraintTop_toBottomOf="@id/tvName" />
 
 
     <TextView
-        android:id="@+id/tvprice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Giá"
-        android:textSize="20sp"
-        android:textColor="@android:color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/imgFood" />
+    android:id="@+id/tvprice"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Giá"
+    android:textSize="20sp"
+    android:textColor="@android:color/black"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="@id/imgFood" />
 
     <TextView
-        android:id="@+id/tvPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="666.666 đ"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="@color/red"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvprice"
-        app:layout_constraintBottom_toBottomOf="parent" />
+    android:id="@+id/tvPrice"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="666.666 đ"
+    android:textSize="20sp"
+    android:textStyle="bold"
+    android:textColor="@color/red"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/tvprice"
+    app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

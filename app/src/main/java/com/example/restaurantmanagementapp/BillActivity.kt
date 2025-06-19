@@ -47,7 +47,7 @@ class BillActivity  : AppCompatActivity() {
                 food?.let {
                     billList.add(
                         OrderItem(
-                            productId = cartItem.menu_id?.toString() ?: "0",
+                            productId = cartItem.menu_id?.toString(),
                             productName = it.name ?: "",
                             productPrice = it.price ?: 0.0,
                             quantity = cartItem.quantity ?: 0,

@@ -3,6 +3,7 @@ package com.example.restaurantmanagementapp
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +14,10 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.restaurantmanagementapp.model.Bill
 import com.example.restaurantmanagementapp.model.CartItem
 import com.example.restaurantmanagementapp.model.Food
-import com.example.restaurantmanagementapp.model.Bill
+import com.example.restaurantmanagementapp.repository.BillRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,7 +45,7 @@ class CartFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        tableNumber = arguments?.getInt("tableNumber") ?: 0
+        tableNumber = com.example.restaurantmanagementapp.util.TableSession.currentTableId.toInt()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -98,7 +100,7 @@ class CartFragment : Fragment() {
             ////////////////////////////////////////////////////////////////////////////////////////////////
 
             CoroutineScope(Dispatchers.Main).launch {
-                // Cập nhật quantity và paid=true cho tất cả cart item
+                // Chỉ cập nhật quantity cho tất cả cart item
                 var allSuccess = true
                 for (i in cartItems.indices) {
                     val cartItem = cartItems[i]
@@ -106,19 +108,43 @@ class CartFragment : Fragment() {
                     val cartItemId = cartItem.cart_item_id
                     if (cartItemId != null) {
                         val updateQuantitySuccess = CartItemRepository.updateCartItemQuantity(cartItemId, newQuantity)
-                        val updatePaidSuccess = CartItemRepository.updateCartItemPaid(cartItemId, true)
-                        if (!updateQuantitySuccess || !updatePaidSuccess) {
+                        if (!updateQuantitySuccess) {
                             allSuccess = false
                         }
                     }
                 }
                 if (allSuccess) {
-                    Toast.makeText(requireContext(), "Thanh toán thành công!", Toast.LENGTH_SHORT).show()
-                    // Có thể reload lại cart hoặc chuyển sang màn hình khác
+                    Toast.makeText(requireContext(), "Cập nhật số lượng thành công!", Toast.LENGTH_SHORT).show()
+                    // Thêm bill vào database
+                    try {
+                        val total = cartItems.zip(foods).sumOf { (cart, food) -> (cart.quantity ?: 0) * (food.price ?: 0.0) }
+                        val bill = Bill(
+                            bill_id = null, // Để database tự sinh ID
+                            user_id = com.example.restaurantmanagementapp.util.TableSession.currentUserId,
+                            table_id = com.example.restaurantmanagementapp.util.TableSession.currentTableId,
+                            total_amount = total.toDouble(),
+                            discount_amount = 0.0,
+                            final_amount = total.toDouble(),
+                            payment_method = "cash",
+                            payment_status = false,
+                            notes = null
+                        )
+                        val billResult = BillRepository.addBill(bill)
+                        if (billResult) {
+                            Toast.makeText(requireContext(), "Đã tạo hóa đơn!", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(requireContext(), "Lỗi khi tạo hóa đơn!", Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: Exception) {
+                        Toast.makeText(requireContext(), "Lỗi khi tạo hóa đơn: ${e.message}", Toast.LENGTH_LONG).show()
+                        e.printStackTrace()
+                    }
                 } else {
-                    Toast.makeText(requireContext(), "Có lỗi khi cập nhật giỏ hàng!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Có lỗi khi cập nhật số lượng!", Toast.LENGTH_SHORT).show()
                 }
             }
+            val intent = Intent(requireContext(), BillActivity::class.java)
+            startActivity(intent)
         }
         // Cập nhật tổng tiền lần đầu
         updateTotalCost()
